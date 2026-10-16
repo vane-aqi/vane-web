@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Reveal } from '../motion/reveal';
-import { Vane } from '../shared/vane';
+import { DeviceRender } from '../shared/device-render';
 
 /** Buy a monitor. Out of stock for now, so it collects emails for a restock notice. */
 @Component({
   selector: 'app-shop',
-  imports: [ReactiveFormsModule, Reveal, Vane],
+  imports: [ReactiveFormsModule, DeviceRender, Reveal],
   template: `
     <div class="container page">
       <div class="art" appReveal="fade">
-        <app-vane class="vane" />
+        <app-device-render class="device" />
       </div>
 
       <div class="info">
@@ -79,7 +79,7 @@ import { Vane } from '../shared/vane';
     .muted {
       color: var(--muted);
     }
-    /* The product shot stand-in: the vane on a quiet surface. */
+    /* The product shot stand-in: a drawn monitor on a quiet surface. */
     .art {
       display: grid;
       place-items: center;
@@ -88,8 +88,8 @@ import { Vane } from '../shared/vane';
       background: var(--surface);
       border: 1px solid var(--line);
     }
-    .vane {
-      width: 52%;
+    .device {
+      width: min(64%, 340px);
     }
     .info {
       display: flex;
@@ -201,10 +201,11 @@ import { Vane } from '../shared/vane';
         grid-template-columns: minmax(0, 1fr);
       }
       .art {
-        aspect-ratio: 16 / 10;
+        aspect-ratio: auto;
+        padding: 36px 0 24px;
       }
-      .vane {
-        width: min(30%, 160px);
+      .device {
+        width: min(52%, 220px);
       }
     }
     @media (max-width: 480px) {

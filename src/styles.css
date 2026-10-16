@@ -298,7 +298,7 @@ a {
   right: -2%;
   top: 50%;
   height: 1px;
-  background: var(--paper);
+  background: var(--flip-hinge, var(--paper));
 }
 
 /* A top rule that can draw in from the left (animate --rule from 0 to 1). */
