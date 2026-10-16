@@ -25,6 +25,11 @@ export const routes: Routes = [
   },
   { path: 'device', redirectTo: 'monitors' },
   {
+    path: 'shop',
+    loadComponent: () => import('./pages/shop').then((m) => m.Shop),
+    title: 'Shop · Vane',
+  },
+  {
     path: 'about',
     loadComponent: () => import('./pages/about').then((m) => m.About),
     title: 'About · Vane',

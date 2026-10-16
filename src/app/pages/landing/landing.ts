@@ -15,6 +15,7 @@ import { RouterLink } from '@angular/router';
 import { byUrgency } from '../../core/evaluate';
 import { ReadingsStore } from '../../core/readings-store';
 import { CountUp } from '../../motion/count-up';
+import { Flip } from '../../motion/flip';
 import { ScrollTrigger, gsap, prefersReducedMotion, splitLines } from '../../motion/gsap';
 import { IntroState } from '../../motion/intro-state';
 import { Reveal } from '../../motion/reveal';
@@ -33,7 +34,7 @@ const AIR_PATHS = Array.from({ length: 9 }, (_, i) => {
 
 @Component({
   selector: 'app-landing',
-  imports: [RouterLink, CountUp, Icon, RangeScale, Reveal, ScrollWords, Vane],
+  imports: [RouterLink, CountUp, Flip, Icon, RangeScale, Reveal, ScrollWords, Vane],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

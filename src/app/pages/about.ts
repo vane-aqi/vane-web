@@ -143,16 +143,51 @@ import { Vane } from '../shared/vane';
       color: var(--ink-2);
     }
     @media (max-width: 760px) {
-      .top {
-        grid-template-columns: minmax(0, 1fr) 84px;
-      }
-      .vane {
-        width: 84px;
-        margin: 0;
-      }
       .definition,
       .principles ul {
         grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    /* Phones: vane tucks in right beside the headline, and everything steps down a size. */
+    @media (max-width: 480px) {
+      .page {
+        gap: 36px;
+        padding-top: 32px;
+      }
+      .top {
+        grid-template-columns: minmax(0, 1fr) 92px;
+        align-items: end;
+        gap: 12px;
+      }
+      h1 {
+        font-size: 36px;
+      }
+      .vane {
+        width: 92px;
+        margin: 0;
+      }
+      .definition {
+        padding-top: 18px;
+      }
+      .definition dt {
+        font-size: 28px;
+      }
+      .definition dd {
+        font-size: 19px;
+      }
+      .story {
+        gap: 12px;
+        font-size: 16px;
+      }
+      .principles ul {
+        gap: 20px;
+        padding-top: 18px;
+      }
+      .principles h3 {
+        font-size: 19px;
+      }
+      .principles p {
+        font-size: 15px;
       }
     }
   `,

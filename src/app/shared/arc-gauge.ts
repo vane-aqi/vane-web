@@ -22,6 +22,7 @@ const GAP = 0.8;
           pathLength="100"
           class="arc"
           [attr.data-tone]="seg.tone"
+          [attr.data-swatch]="seg.swatch"
           [attr.stroke-dasharray]="seg.dash"
           [attr.stroke-dashoffset]="seg.offset"
         />
@@ -47,6 +48,15 @@ const GAP = 0.8;
       fill: none;
       stroke: var(--tone-fill);
       stroke-width: 6;
+    }
+    .arc[data-swatch='cold'] {
+      stroke: var(--cold-fill);
+    }
+    .arc[data-swatch='comfort'] {
+      stroke: var(--comfort-fill);
+    }
+    .arc[data-swatch='hot'] {
+      stroke: var(--hot-fill);
     }
     .needle {
       stroke: var(--ink);
@@ -79,6 +89,7 @@ export class ArcGauge {
   protected readonly arcs = computed(() =>
     this.segments().map((s) => ({
       tone: s.tone,
+      swatch: s.swatch,
       dash: `${Math.max(0, s.widthPct - GAP)} 100`,
       offset: -s.startPct,
     })),

@@ -35,7 +35,7 @@
           <dt class="mono">{{ r.def.shortLabel }}</dt>
           <dd class="readout-value">
             <span class="num" [appCountUp]="r.display" [countWhen]="heroReady()"></span>
-            <span class="mono">{{ r.unit }}</span>
+            <span class="mono" [appFlip]="r.unit"></span>
           </dd>
           <dd class="state">{{ r.status }}</dd>
         </div>
@@ -62,7 +62,7 @@
         </div>
         <p class="m-value">
           <span class="num" [appCountUp]="r.display"></span>
-          <span class="mono">{{ r.unit }}</span>
+          <span class="mono" [appFlip]="r.unit"></span>
         </p>
         <p class="m-why">{{ r.def.whyItMatters }}</p>
         <app-range-scale
@@ -72,7 +72,7 @@
           [label]="r.def.label + ' is ' + r.status"
         />
         <p class="m-foot mono">
-          <span>Healthy {{ r.healthy }}</span>
+          <span [appFlip]="'Healthy ' + r.healthy"></span>
           <span class="state">{{ r.status }}</span>
         </p>
         @if (r.gases.length) {

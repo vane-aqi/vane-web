@@ -30,6 +30,12 @@ describe('evaluate', () => {
     expect(total).toBeCloseTo(100);
   });
 
+  it('gives temperature thermal colors: cold, comfort, hot', () => {
+    const temperature = METRIC_DEFINITIONS.find((m) => m.id === 'temperature')!.scale;
+    expect(segmentsFor(temperature).map((s) => s.swatch)).toEqual(['cold', 'comfort', 'hot']);
+    expect(segmentsFor(humidity).every((s) => s.swatch === undefined)).toBe(true);
+  });
+
   it('rates overall health from the worst readings', () => {
     expect(overallHealth(['good', 'good']).label).toBe('Good');
     expect(overallHealth(['alert', 'good']).label).toBe('Fair');
@@ -62,6 +68,12 @@ describe('ReadingsStore with sample data', () => {
     TestBed.inject(Preferences).temperatureUnit.set('C');
     expect(reading('temperature').display).toBe('19.4');
     expect(reading('temperature').healthy).toBe('20–24°C');
+  });
+
+  it('labels zone boundaries in the display unit', () => {
+    expect(reading('temperature').bounds.map((b) => b.label)).toEqual(['68°F', '75°F']);
+    TestBed.inject(Preferences).temperatureUnit.set('C');
+    expect(reading('temperature').bounds.map((b) => b.label)).toEqual(['20°C', '24°C']);
   });
 
   it('lists the most urgent action first', () => {

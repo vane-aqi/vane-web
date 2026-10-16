@@ -31,7 +31,7 @@ const TICKS = Array.from({ length: 24 }, (_, i) => {
 /**
  * A line-drawn weather vane. It draws itself in, then the arrow keeps turning
  * in 3D as if catching drafts, while a dot on the compass ring tracks where it
- * points. The arrowhead and dot are drawn in the vane's blue.
+ * points. The arrowhead and dot are drawn in the vane's spruce green.
  * Size it by setting a width on the element; it's 4:3 tall.
  */
 @Component({
@@ -137,7 +137,7 @@ const TICKS = Array.from({ length: 24 }, (_, i) => {
     }
     .head,
     .heading {
-      fill: var(--vane-blue);
+      fill: var(--vane-accent);
     }
     .solid {
       fill: var(--ink);

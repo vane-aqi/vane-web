@@ -107,6 +107,11 @@ h1 {
   max-width: min(400px, 40vh);
 }
 
+/* The thermometer is tall and narrow, so it's sized by height instead. */
+.dial.thermo {
+  max-width: none;
+}
+
 .value {
   font-size: clamp(52px, min(7vw, 10.5vh), 104px);
   font-weight: 500;
@@ -132,6 +137,14 @@ h1 {
 
 .healthy {
   color: var(--ink);
+}
+
+/* The thermometer labels its own ends, so only the healthy range stays below it. */
+.gauge-area:has(.thermo) .scale {
+  justify-content: center;
+}
+.gauge-area:has(.thermo) .scale .end {
+  display: none;
 }
 
 /* Advice --------------------------------------------------------------- */
@@ -344,6 +357,13 @@ details[open] > summary::after {
   }
   .scale .end {
     display: none;
+  }
+  /* The thermometer is wider than the dial, so its column sizes to fit it. */
+  .gauge-area:has(.thermo) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .gauge-area:has(.thermo) .scale {
+    justify-content: flex-start;
   }
   .advice-area {
     gap: 12px;

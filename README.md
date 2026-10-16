@@ -25,6 +25,7 @@ The moon/sun button in the header switches between light and dark themes. The fi
 | `/dashboard?room=…` | Room switcher, then every reading for that room plus what to do, most urgent first |
 | `/readings/:id?room=…` | One reading in depth, sized to fit one screen: gauge, advice, and for gases each gas |
 | `/monitors` | Every monitor (one per room) and the flow for adding another |
+| `/shop` | Buy a monitor. Currently out of stock, with a "notify me" email form |
 | `/about`, `/contact` | About and a contact form with validation |
 
 ## Project layout
@@ -107,3 +108,4 @@ Nothing else needs to change. If the device reports extra values, add them to `S
 - `[YOUR EMAIL]` in `pages/contact/contact.html`
 - Room names and sample values in `core/sample-sensor-source.ts`
 - The contact form doesn't send anywhere yet (see the `TODO` in `contact.ts`)
+- `[PRICE]` and `[SHIPPING DETAILS]` on the Shop page (`pages/shop.ts`), and its restock email form doesn't send anywhere yet

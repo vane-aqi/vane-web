@@ -7,7 +7,7 @@ import { Segment } from '../core/models';
   template: `
     <div class="track" role="img" [attr.aria-label]="label()">
       @for (seg of segments(); track seg.startPct) {
-        <span class="seg" [attr.data-tone]="seg.tone" [style.flex-grow]="seg.widthPct"></span>
+        <span class="seg" [attr.data-tone]="seg.tone" [attr.data-swatch]="seg.swatch" [style.flex-grow]="seg.widthPct"></span>
       }
       <span class="marker" [style.left.%]="markerPct()"></span>
     </div>
@@ -25,6 +25,16 @@ import { Segment } from '../core/models';
     .seg {
       flex-basis: 0;
       background: var(--tone-fill);
+    }
+    /* Thermal zones (temperature) override the status color. */
+    .seg[data-swatch='cold'] {
+      background: var(--cold-fill);
+    }
+    .seg[data-swatch='comfort'] {
+      background: var(--comfort-fill);
+    }
+    .seg[data-swatch='hot'] {
+      background: var(--hot-fill);
     }
     .marker {
       position: absolute;

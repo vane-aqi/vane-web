@@ -1,4 +1,5 @@
 import { DestroyRef, Directive, ElementRef, effect, inject, input, untracked } from '@angular/core';
+import { flipText } from './flip';
 import { ScrollTrigger, gsap, prefersReducedMotion } from './gsap';
 
 /**
@@ -18,6 +19,8 @@ export class CountUp {
 
   private readonly el = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
   private played = false;
+  /** The text currently settled on screen, so a change can flip from it. */
+  private shown: string | null = null;
   private tween?: gsap.core.Tween;
   private trigger?: ScrollTrigger;
 
@@ -34,11 +37,14 @@ export class CountUp {
   }
 
   private update(text: string, when: 'view' | boolean): void {
-    // Once counted (or with reduced motion), later changes such as °F → °C just swap the text.
+    // Once counted, later changes such as °F → °C flip like a split-flap board.
     if (this.played || prefersReducedMotion()) {
+      const from = this.shown;
       this.played = true;
       this.tween?.kill();
-      this.el.textContent = text;
+      this.shown = text;
+      if (from === null) this.el.textContent = text;
+      else flipText(this.el, from, text);
       return;
     }
 
@@ -66,7 +72,10 @@ export class CountUp {
       duration: 1.4,
       ease: 'power3.out',
       onUpdate: () => (this.el.textContent = format(counter.v, decimals)),
-      onComplete: () => (this.el.textContent = this.appCountUp()),
+      onComplete: () => {
+        this.shown = this.appCountUp();
+        this.el.textContent = this.shown;
+      },
     });
   }
 }

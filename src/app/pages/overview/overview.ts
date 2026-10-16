@@ -14,13 +14,14 @@ import {
 import { RouterLink } from '@angular/router';
 import { OverallHealth } from '../../core/models';
 import { ReadingsStore } from '../../core/readings-store';
+import { Flip } from '../../motion/flip';
 import { gsap, prefersReducedMotion } from '../../motion/gsap';
 import { Icon } from '../../shared/icon';
 import { RangeScale } from '../../shared/range-scale';
 
 @Component({
   selector: 'app-overview',
-  imports: [RouterLink, DatePipe, Icon, RangeScale],
+  imports: [RouterLink, DatePipe, Flip, Icon, RangeScale],
   templateUrl: './overview.html',
   styleUrl: './overview.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

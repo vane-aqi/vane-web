@@ -20,20 +20,37 @@
           <span class="state" appReveal [revealDelay]="0.2">{{ r.status }}</span>
         </div>
 
-        <app-arc-gauge
-          class="dial"
-          [segments]="r.segments"
-          [markerPct]="r.markerPct"
-          [label]="r.def.label + ' is ' + r.display + ' ' + r.unit + ', ' + r.status"
-        >
-          <span class="value">{{ r.display }}</span>
-          <span class="unit mono">{{ r.unit }}@if (r.id === 'gases') { CO }</span>
-        </app-arc-gauge>
+        @if (r.id === 'temperature') {
+          <!-- Temperature gets a thermometer instead of the dial. -->
+          <app-thermometer
+            class="dial thermo"
+            [segments]="r.segments"
+            [markerPct]="r.markerPct"
+            [bounds]="r.bounds"
+            [scaleMin]="r.scaleMin"
+            [scaleMax]="r.scaleMax"
+            [compact]="compact()"
+            [label]="r.def.label + ' is ' + r.display + ' ' + r.unit + ', ' + r.status"
+          >
+            <span class="value" [appFlip]="r.display"></span>
+            <span class="unit mono" [appFlip]="r.unit"></span>
+          </app-thermometer>
+        } @else {
+          <app-arc-gauge
+            class="dial"
+            [segments]="r.segments"
+            [markerPct]="r.markerPct"
+            [label]="r.def.label + ' is ' + r.display + ' ' + r.unit + ', ' + r.status"
+          >
+            <span class="value" [appFlip]="r.display"></span>
+            <span class="unit mono" [appFlip]="r.id === 'gases' ? r.unit + ' CO' : r.unit"></span>
+          </app-arc-gauge>
+        }
 
         <p class="scale mono">
-          <span class="end">{{ r.scaleMin }}</span>
-          <span class="healthy">Healthy {{ r.healthy }}</span>
-          <span class="end">{{ r.scaleMax }}</span>
+          <span class="end" [appFlip]="r.scaleMin"></span>
+          <span class="healthy" [appFlip]="'Healthy ' + r.healthy"></span>
+          <span class="end" [appFlip]="r.scaleMax"></span>
         </p>
       </section>
 
@@ -67,7 +84,7 @@
               <li [attr.data-tone]="g.tone">
                 <div class="gas-top">
                   <h2>{{ g.def.name }}</h2>
-                  <p class="gas-value"><span class="num">{{ g.display }}</span><span class="mono">{{ g.unit }}</span></p>
+                  <p class="gas-value"><span class="num" [appFlip]="g.display"></span><span class="mono">{{ g.unit }}</span></p>
                 </div>
                 <app-range-scale [segments]="g.segments" [markerPct]="g.markerPct" [label]="g.def.name + ' is ' + g.status" />
                 <p class="gas-meta">

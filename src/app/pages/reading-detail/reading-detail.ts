@@ -4,8 +4,10 @@ import { ReadingsStore } from '../../core/readings-store';
 import { ArcGauge } from '../../shared/arc-gauge';
 import { Icon } from '../../shared/icon';
 import { mediaQuery } from '../../shared/media-query';
+import { Flip } from '../../motion/flip';
 import { Reveal } from '../../motion/reveal';
 import { RangeScale } from '../../shared/range-scale';
+import { Thermometer } from '../../shared/thermometer';
 
 /**
  * One reading, laid out to fit a single screen. On phones the supporting
@@ -13,7 +15,7 @@ import { RangeScale } from '../../shared/range-scale';
  */
 @Component({
   selector: 'app-reading-detail',
-  imports: [RouterLink, RouterLinkActive, ArcGauge, Icon, RangeScale, Reveal],
+  imports: [RouterLink, RouterLinkActive, ArcGauge, Flip, Icon, RangeScale, Reveal, Thermometer],
   templateUrl: './reading-detail.html',
   styleUrl: './reading-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

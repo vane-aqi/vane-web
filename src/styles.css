@@ -13,21 +13,27 @@
   --night-muted: #9aa59f;
   /* The needle color. Used sparingly: the intro sweep and focus outlines. */
   --signal: #c8462f;
-  /* The weather vane's arrowhead and heading dot. */
-  --vane-blue: #2f62a8;
+  /* Thermal colors, used only on the temperature scale: cobalt cold, sage comfort, warm red.
+     Picked to stay distinct from sky-blue "clear" and orange "ember". */
+  --cold-fill: #3577cc;
+  --comfort-fill: #9cc5a8;
+  --hot-fill: #d9645f;
+
+  /* The weather vane's arrowhead and heading dot: a spruce green from the brand's neutrals. */
+  --vane-accent: #2f7a55;
 
   /*
    * Status palette, named for what the air looks like:
-   *   Clear (good)  a cold, clean teal
+   *   Clear (good)  open sky blue
    *   Haze  (watch) dusty ochre, like smog on the horizon
    *   Ember (alert) a deep burnt red
-   * Teal against orange stays distinct for colorblind viewers, and each tone also
+   * Blue against orange stays distinct for colorblind viewers, and each tone also
    * differs in lightness (haze lightest, ember darkest), so the bars read in grayscale.
    */
-  --good-fg: #1d5f68;
-  --good-bg: #dcebec;
-  --good-dot: #2b8590;
-  --good-fill: #7fb7bd;
+  --good-fg: #1f6391;
+  --good-bg: #ddebf5;
+  --good-dot: #3a8cc4;
+  --good-fill: #8cc3e6;
   --watch-fg: #85590c;
   --watch-bg: #f3e8d0;
   --watch-dot: #c39232;
@@ -59,12 +65,15 @@
   --line: #252e2a;
   --line-strong: #3b4640;
   --signal: #e0603f;
-  --vane-blue: #6f9fe6;
+  --vane-accent: #6cc196;
+  --cold-fill: #3f80d0;
+  --comfort-fill: #7d9a88;
+  --hot-fill: #c4554f;
 
-  --good-fg: #82c3ca;
-  --good-bg: #142729;
-  --good-dot: #44a2ac;
-  --good-fill: #3f8a92;
+  --good-fg: #8ccbf0;
+  --good-bg: #13263a;
+  --good-dot: #4ea3da;
+  --good-fill: #3d84b5;
   --watch-fg: #e3bf72;
   --watch-bg: #2a2314;
   --watch-dot: #cf9f3c;
@@ -250,6 +259,46 @@ a {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* Split-flap characters (see motion/flip.ts). Each changed character is a cell
+   holding static halves of the old/new character and two flaps that rotate. */
+.flip-cell {
+  position: relative;
+  display: inline-block;
+  perspective: 320px;
+  white-space: pre;
+}
+.flip-size {
+  visibility: hidden;
+}
+.flip-half,
+.flip-flap {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+.flip-top {
+  clip-path: inset(-20% -10% 50% -10%);
+}
+.flip-bottom {
+  clip-path: inset(50% -10% -20% -10%);
+}
+.flip-flap {
+  transform-origin: 50% 50%;
+}
+.flip-flap.flip-bottom {
+  transform: rotateX(90deg);
+}
+/* The hinge: a hairline across the middle while a character is flipping. */
+.flip-cell:has(.flip-flap)::after {
+  content: '';
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  top: 50%;
+  height: 1px;
+  background: var(--paper);
 }
 
 /* A top rule that can draw in from the left (animate --rule from 0 to 1). */

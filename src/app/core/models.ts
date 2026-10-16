@@ -36,6 +36,12 @@ export interface SensorSnapshot {
   takenAt: Date;
 }
 
+/**
+ * Optional color for a zone on its scale, used instead of the status tone.
+ * Temperature uses these so cold reads blue and hot reads red, as people expect.
+ */
+export type Swatch = 'cold' | 'comfort' | 'hot';
+
 /** A band on a scale, with what to tell the user when a value falls in it. */
 export interface Zone {
   from: number;
@@ -43,6 +49,7 @@ export interface Zone {
   tone: Tone;
   status: string;
   advice: string;
+  swatch?: Swatch;
 }
 
 export interface Scale {
@@ -56,6 +63,7 @@ export interface Segment {
   startPct: number;
   widthPct: number;
   tone: Tone;
+  swatch?: Swatch;
 }
 
 export interface MetricDefinition {
@@ -104,6 +112,8 @@ export interface Reading extends Evaluated {
   def: MetricDefinition;
   scaleMin: string;
   scaleMax: string;
+  /** Where one zone ends and the next begins, as a position on the scale plus a display label. */
+  bounds: { pct: number; label: string }[];
   healthy: string;
   gases: GasReading[];
 }

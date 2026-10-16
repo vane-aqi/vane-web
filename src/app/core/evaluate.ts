@@ -21,6 +21,7 @@ export function segmentsFor(scale: Scale): Segment[] {
     startPct: ((z.from - scale.min) / span) * 100,
     widthPct: ((z.to - z.from) / span) * 100,
     tone: z.tone,
+    swatch: z.swatch,
   }));
 }
 

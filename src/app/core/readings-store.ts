@@ -93,6 +93,10 @@ export class ReadingsStore {
       segments: segmentsFor(def.scale),
       scaleMin: this.label(def, def.scale.min),
       scaleMax: this.label(def, def.scale.max),
+      bounds: def.scale.zones.slice(1).map((z) => ({
+        pct: ((z.from - def.scale.min) / (def.scale.max - def.scale.min)) * 100,
+        label: this.label(def, z.from),
+      })),
       healthy: goodZone ? this.rangeLabel(def, goodZone.from, goodZone.to) : '',
       gases,
     };
