@@ -1,0 +1,125 @@
+@let m = monitor();
+
+<div class="container page">
+  @if (store.isSample) {
+    <p class="sample mono">
+      <span>Sample data. No monitors connected yet.</span>
+      <a routerLink="/monitors">Connect a monitor</a>
+    </p>
+  }
+
+  <nav class="rooms ruled" aria-label="Rooms">
+    @for (room of store.monitors(); track room.id) {
+      <a
+        class="room"
+        routerLink="/dashboard"
+        [queryParams]="{ room: room.id }"
+        [class.active]="room.id === m.id"
+        [attr.aria-current]="room.id === m.id ? 'page' : null"
+      >
+        <span class="room-name">{{ room.name }}</span>
+        <span class="room-meta">
+          @if (room.overall; as o) {
+            <span class="state" [attr.data-tone]="o.tone">{{ o.label }}</span>
+          } @else {
+            <span class="state off">Offline</span>
+          }
+          <span class="mini" aria-hidden="true">
+            @for (r of room.readings; track r.id) {
+              <i [attr.data-tone]="r.tone"></i>
+            } @empty {
+              <i class="off"></i>
+            }
+          </span>
+        </span>
+      </a>
+    }
+  </nav>
+
+  <header class="head">
+    <div class="place">
+      <p class="mono muted">
+        @if (!m.online) {
+          Offline
+        } @else if (store.isSample) {
+          Sample reading
+        } @else {
+          Updated {{ m.takenAt | date: 'shortTime' }}
+        }
+      </p>
+      <h1>{{ m.name }}</h1>
+    </div>
+    @if (m.overall; as o) {
+      <div class="verdict" [attr.data-tone]="o.tone">
+        <p class="mono muted">Overall</p>
+        <p class="verdict-word">{{ o.label }}</p>
+        <p class="verdict-sub">{{ summary(o) }}</p>
+      </div>
+    }
+  </header>
+
+  @if (m.online) {
+    <div class="layout">
+      <section class="panel ruled" aria-labelledby="readings-heading">
+        <div class="panel-head mono">
+          <h2 id="readings-heading">Readings</h2>
+          <span class="hide-sm">Healthy range</span>
+          <span class="hide-sm">Status</span>
+        </div>
+        <ul class="rows">
+          @for (r of m.readings; track r.id) {
+            <li>
+              <a class="row" [routerLink]="['/readings', r.id]" [queryParams]="{ room: m.id }" [attr.data-tone]="r.tone">
+                <span class="r-name">
+                  <span class="r-label">{{ r.def.label }}</span>
+                  <span class="r-sum">{{ r.def.summary }}</span>
+                </span>
+                <span class="r-value"><span class="num">{{ r.display }}</span><span class="mono">{{ r.unit }}</span></span>
+                <span class="r-scale">
+                  <app-range-scale [segments]="r.segments" [markerPct]="r.markerPct" [label]="'Healthy range ' + r.healthy" />
+                  <span class="mono muted">{{ r.healthy }}</span>
+                </span>
+                <span class="state">{{ r.status }}</span>
+                <app-icon class="go" name="arrow-right" [size]="18" />
+              </a>
+              @if (r.gases.length) {
+                <ul class="sub">
+                  @for (g of r.gases; track g.def.id) {
+                    <li [attr.data-tone]="g.tone">
+                      <span>{{ g.def.name }}</span>
+                      <span class="num">{{ g.display }}<span class="mono">{{ g.unit }}</span></span>
+                      <span class="state">{{ g.status }}</span>
+                    </li>
+                  }
+                </ul>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+
+      <aside class="todo ruled" aria-labelledby="todo-heading">
+        <h2 id="todo-heading">What to do</h2>
+        <ul>
+          @for (action of m.actions; track action.id) {
+            <li [attr.data-tone]="action.tone">
+              <p class="when mono">
+                <span class="state">{{ action.tone === 'alert' ? 'Now' : 'Today' }}</span>
+                <a [routerLink]="['/readings', action.id]" [queryParams]="{ room: m.id }">{{ action.def.label }}</a>
+              </p>
+              <p>{{ action.advice }}</p>
+            </li>
+          } @empty {
+            <li><p>Nothing to do. Every reading is in range.</p></li>
+          }
+        </ul>
+      </aside>
+    </div>
+  } @else {
+    <section class="offline ruled">
+      <h2>This monitor hasn't checked in.</h2>
+      <p>Make sure it's plugged in and powered on. Readings will appear here as soon as it reconnects.</p>
+      <a class="btn" routerLink="/monitors">Manage monitors</a>
+    </section>
+  }
+</div>

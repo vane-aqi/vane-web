@@ -1,0 +1,95 @@
+<div class="container page">
+  <div class="topbar">
+    <a routerLink="/dashboard" [queryParams]="{ room: monitor().id }" class="back mono" [attr.aria-label]="'Back to ' + monitor().name">
+      <app-icon name="arrow-left" [size]="16" /><span class="back-label">{{ monitor().name }}</span>
+    </a>
+    <nav class="tabs" aria-label="Readings">
+      @for (t of monitor().readings; track t.id) {
+        <a class="mono" [routerLink]="['/readings', t.id]" [queryParams]="{ room: monitor().id }" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.data-tone]="t.tone">
+          <span class="sq" aria-hidden="true"></span>{{ t.def.shortLabel }}
+        </a>
+      }
+    </nav>
+  </div>
+
+  @if (reading(); as r) {
+    <div class="grid" [class.has-gases]="r.gases.length > 0" [attr.data-tone]="r.tone">
+      <section class="gauge-area" aria-labelledby="reading-title">
+        <div class="title">
+          <h1 id="reading-title" appReveal>{{ r.def.label }}</h1>
+          <span class="state" appReveal [revealDelay]="0.2">{{ r.status }}</span>
+        </div>
+
+        <app-arc-gauge
+          class="dial"
+          [segments]="r.segments"
+          [markerPct]="r.markerPct"
+          [label]="r.def.label + ' is ' + r.display + ' ' + r.unit + ', ' + r.status"
+        >
+          <span class="value">{{ r.display }}</span>
+          <span class="unit mono">{{ r.unit }}@if (r.id === 'gases') { CO }</span>
+        </app-arc-gauge>
+
+        <p class="scale mono">
+          <span class="end">{{ r.scaleMin }}</span>
+          <span class="healthy">Healthy {{ r.healthy }}</span>
+          <span class="end">{{ r.scaleMax }}</span>
+        </p>
+      </section>
+
+      <section class="advice-area ruled" aria-labelledby="advice-label" appReveal="rule">
+        <p class="mono label" id="advice-label" appReveal [revealDelay]="0.1">What to do</p>
+        <p class="advice-text" appReveal [revealDelay]="0.18">{{ r.advice }}</p>
+
+        <div class="facts" appReveal [revealDelay]="0.3">
+          <details class="fact" [open]="!compact()">
+            <summary class="mono">Healthy range</summary>
+            <p>{{ r.def.healthyRange }}</p>
+          </details>
+          <details class="fact" [open]="!compact()">
+            <summary class="mono">Why it matters</summary>
+            <p>{{ r.def.whyItMatters }}</p>
+          </details>
+          @if (!r.gases.length) {
+            <details class="fact" [open]="!compact()">
+              <summary class="mono">What it is</summary>
+              <p>{{ r.def.about }}</p>
+            </details>
+          }
+        </div>
+      </section>
+
+      @if (r.gases.length) {
+        <details class="gas-area" [open]="!compact()" appReveal [revealDelay]="0.35">
+          <summary class="mono">Each gas</summary>
+          <ul>
+            @for (g of r.gases; track g.def.id) {
+              <li [attr.data-tone]="g.tone">
+                <div class="gas-top">
+                  <h2>{{ g.def.name }}</h2>
+                  <p class="gas-value"><span class="num">{{ g.display }}</span><span class="mono">{{ g.unit }}</span></p>
+                </div>
+                <app-range-scale [segments]="g.segments" [markerPct]="g.markerPct" [label]="g.def.name + ' is ' + g.status" />
+                <p class="gas-meta">
+                  <span class="state">{{ g.status }}</span>
+                  <span class="mono">Typical {{ g.def.typical }}</span>
+                </p>
+                <p class="gas-about">{{ g.def.about }}</p>
+              </li>
+            }
+          </ul>
+        </details>
+      }
+    </div>
+  } @else {
+    <section class="missing">
+      @if (monitor().online) {
+        <h1>We don't track that reading</h1>
+        <p>Pick one of the readings above, or head back to the dashboard.</p>
+      } @else {
+        <h1>{{ monitor().name }} is offline</h1>
+        <p>There are no readings from this monitor right now.</p>
+      }
+    </section>
+  }
+</div>

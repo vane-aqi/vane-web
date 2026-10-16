@@ -1,0 +1,357 @@
+/*
+ * Sized to fit one screen. Type and the dial scale with both viewport width (vw)
+ * and height (vh), so short laptop screens shrink things instead of scrolling.
+ */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 3.2vh, 36px);
+  padding-block: 0 clamp(16px, 3vh, 32px);
+}
+
+/* Back link + reading tabs ------------------------------------------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  min-height: 48px;
+  padding-right: 24px;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--ink);
+}
+
+.tabs {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.tabs a:hover {
+  color: var(--ink);
+}
+
+.tabs a.active {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.sq {
+  width: 7px;
+  height: 7px;
+  background: var(--tone-dot);
+}
+
+/* Main grid: dial | advice (| gases) --------------------------------- */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(24px, 3vh, 40px) clamp(28px, 4vw, 72px);
+}
+
+.grid.has-gases {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.gauge-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 2vh, 20px);
+}
+
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  width: 100%;
+}
+
+h1 {
+  font-size: clamp(34px, min(4.6vw, 7vh), 72px);
+  font-stretch: 88%;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.dial {
+  width: 100%;
+  max-width: min(400px, 40vh);
+}
+
+.value {
+  font-size: clamp(52px, min(7vw, 10.5vh), 104px);
+  font-weight: 500;
+  font-stretch: 112%;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: min(440px, 46vh);
+  color: var(--muted);
+}
+
+.healthy {
+  color: var(--ink);
+}
+
+/* Advice --------------------------------------------------------------- */
+.advice-area {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2.2vh, 22px);
+  padding-top: 18px;
+}
+
+/* A heavier rule in the reading's status color, drawn in on entrance. */
+.advice-area.ruled::before {
+  height: 3px;
+  background: var(--tone-dot);
+}
+
+.label {
+  color: var(--tone-fg);
+}
+
+.advice-text {
+  font-size: clamp(19px, min(2vw, 3.3vh), 30px);
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Collapsible sections (open on larger screens, collapsed on phones) */
+details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  color: var(--muted);
+  list-style: none;
+  cursor: pointer;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::after {
+  content: '+';
+  font-size: 16px;
+}
+
+details[open] > summary::after {
+  content: '−';
+}
+
+.fact {
+  border-top: 1px solid var(--line);
+}
+
+.fact p {
+  max-width: 48ch;
+  padding-bottom: clamp(8px, 1.6vh, 16px);
+  font-size: clamp(14px, min(1.15vw, 2.1vh), 16px);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* Gases ---------------------------------------------------------------- */
+.gas-area > summary {
+  border-bottom: 1px solid var(--ink);
+}
+
+.gas-area ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gas-area li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-block: clamp(12px, 2.2vh, 20px);
+  border-bottom: 1px solid var(--line);
+}
+
+.gas-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gas-top h2 {
+  font-size: clamp(17px, 2.4vh, 20px);
+  letter-spacing: -0.015em;
+}
+
+.gas-value {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.gas-value .num {
+  font-size: clamp(26px, 4.2vh, 36px);
+  font-weight: 500;
+  font-stretch: 112%;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.gas-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  color: var(--muted);
+}
+
+.gas-about {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 48px 0;
+}
+
+/* Short screens (landscape tablets, small laptops): drop the least important text. */
+@media (max-height: 920px) and (min-width: 700px) {
+  .gas-about {
+    display: none;
+  }
+}
+
+/* Tablet: dial and advice side by side, gases underneath in three columns. */
+@media (max-width: 999px) {
+  .grid.has-gases {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .gas-area {
+    grid-column: 1 / -1;
+  }
+  .gas-area ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+  .gas-about {
+    display: none;
+  }
+}
+
+/* Phone: one column. The dial sits beside the title, and the extra sections collapse. */
+@media (max-width: 699px) {
+  .topbar {
+    gap: 16px;
+  }
+  .back {
+    padding-right: 16px;
+  }
+  .back-label {
+    display: none;
+  }
+  /* Tabs scroll sideways here; fade the edge so it's clear there are more. */
+  .tabs {
+    gap: 20px;
+    padding-right: 24px;
+    mask-image: linear-gradient(to right, #000 82%, transparent);
+  }
+  .grid,
+  .grid.has-gases {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .gauge-area {
+    display: grid;
+    grid-template-columns: 148px minmax(0, 1fr);
+    grid-template-areas:
+      'dial title'
+      'dial scale';
+    align-items: center;
+    column-gap: 20px;
+    row-gap: 10px;
+  }
+  .title {
+    grid-area: title;
+    align-self: end;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  h1 {
+    font-size: 34px;
+  }
+  .dial {
+    grid-area: dial;
+    max-width: none;
+  }
+  .value {
+    font-size: 44px;
+  }
+  .scale {
+    grid-area: scale;
+    align-self: start;
+  }
+  .scale .end {
+    display: none;
+  }
+  .advice-area {
+    gap: 12px;
+  }
+  .advice-text {
+    font-size: 18px;
+  }
+  .gas-area ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,140 @@
+.page {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 48px clamp(40px, 6vw, 96px);
+  padding-top: clamp(40px, 7vh, 72px);
+}
+
+.intro {
+  flex: 1 1 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+h1 {
+  font-size: clamp(44px, 6vw, 88px);
+  font-stretch: 88%;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+}
+.lede {
+  max-width: 28em;
+  font-size: 18px;
+  color: var(--ink-2);
+}
+.kicker {
+  color: var(--muted);
+}
+.channel {
+  margin: 16px 0 0;
+  padding-top: 16px;
+}
+.channel::before {
+  background: var(--line-strong);
+}
+.channel dt {
+  color: var(--muted);
+}
+.channel dd {
+  margin: 6px 0 0;
+  font-size: 18px;
+}
+
+form {
+  flex: 1 1 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-top: 20px;
+}
+h2 {
+  font-size: 24px;
+}
+.pair {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 16px;
+}
+.pair .field {
+  flex: 1 1 200px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+label {
+  font-size: 14px;
+  font-weight: 600;
+}
+input,
+select,
+textarea {
+  font: inherit;
+  font-size: 16px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+textarea {
+  resize: vertical;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+/* Focusing a field draws an ink underline across it, like the rules elsewhere. */
+.field {
+  position: relative;
+}
+.field::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  bottom: 0;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
+}
+.field:has(.error)::after {
+  bottom: 30px;
+}
+.field:focus-within::after {
+  transform: scaleX(1);
+}
+[aria-invalid='true'] {
+  border-color: var(--alert-fg);
+}
+.error {
+  font-size: 14px;
+  color: var(--alert-fg);
+}
+.sent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--good-bg);
+  color: var(--good-fg);
+  font-weight: 600;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--muted);
+}

@@ -1,0 +1,105 @@
+.intro {
+  /* Always dark, whichever theme is active. */
+  --night: #0f1512;
+  --night-fg: #eef0ea;
+  --night-muted: #9aa59f;
+  --signal: #c8462f;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(20px, 4vw, 48px);
+  background: var(--night);
+  color: var(--night-fg);
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+.top {
+  margin: 0;
+  color: var(--night-muted);
+}
+
+.center {
+  align-self: center;
+}
+
+.word {
+  display: flex;
+  margin: 0;
+  font-size: clamp(96px, 24vw, 340px);
+  font-weight: 700;
+  font-stretch: 125%;
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+}
+
+.mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+.ch {
+  display: inline-block;
+}
+
+.sweep {
+  display: block;
+  height: 2px;
+  margin-top: clamp(16px, 3vw, 32px);
+  background: var(--signal);
+  transform-origin: left center;
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.readouts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(96px, auto));
+  gap: 8px clamp(20px, 4vw, 56px);
+  margin: 0;
+}
+
+.readouts dt {
+  color: var(--night-muted);
+}
+
+.readouts dd {
+  margin: 4px 0 0;
+  font-size: clamp(22px, 2.6vw, 34px);
+  font-weight: 500;
+  font-stretch: 110%;
+  font-variant-numeric: tabular-nums;
+}
+
+.readouts dd .mono {
+  color: var(--night-muted);
+}
+
+.skip {
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--night-muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.skip:hover {
+  color: var(--night-fg);
+}
+
+@media (max-width: 640px) {
+  .readouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

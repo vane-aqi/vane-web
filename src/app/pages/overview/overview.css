@@ -1,0 +1,367 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 4vh, 40px);
+  padding-top: 24px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.sample {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  color: var(--muted);
+}
+
+.sample a {
+  color: var(--ink);
+  text-underline-offset: 4px;
+}
+
+/* Room switcher ------------------------------------------------------- */
+.rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.room {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 20px 16px 0;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+/* The selected room gets a heavier rule on top. */
+.room::before {
+  content: '';
+  position: absolute;
+  inset: -1px 20px auto 0;
+  height: 3px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.room:hover,
+.room.active {
+  color: var(--ink);
+}
+
+.room.active::before {
+  transform: scaleX(1);
+}
+
+.room-name {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.room-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.room-meta .state {
+  font-size: 13px;
+}
+
+.mini {
+  display: flex;
+  gap: 2px;
+  width: 64px;
+  height: 10px;
+}
+
+.mini i {
+  flex: 1;
+  background: var(--tone-fill);
+}
+
+.mini i.off {
+  background: repeating-linear-gradient(-45deg, var(--line-strong) 0 1px, transparent 1px 5px);
+}
+
+/* Header row ---------------------------------------------------------- */
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+}
+
+.place {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+h1 {
+  font-size: clamp(40px, min(6vw, 9vh), 88px);
+  font-stretch: 88%;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+}
+
+.verdict {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: end;
+  gap: 4px 20px;
+}
+
+.verdict .mono {
+  grid-column: 1 / -1;
+}
+
+.verdict-word {
+  font-size: clamp(40px, min(5vw, 8vh), 68px);
+  font-weight: 600;
+  font-stretch: 112%;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--tone-fg);
+}
+
+.verdict-sub {
+  max-width: 16ch;
+  padding-bottom: 4px;
+  color: var(--ink-2);
+}
+
+/* Layout -------------------------------------------------------------- */
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 40px clamp(32px, 4vw, 64px);
+}
+
+.panel {
+  flex: 999 1 640px;
+  min-width: 0;
+}
+
+.panel-head,
+.row,
+.sub li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(110px, 0.7fr) minmax(0, 1fr) 150px 20px;
+  align-items: center;
+  gap: 16px 24px;
+}
+
+.panel-head {
+  padding-block: 12px;
+  color: var(--muted);
+}
+
+.panel-head h2 {
+  grid-column: span 2;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.rows,
+.sub {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rows > li {
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  padding-block: 20px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.row:hover {
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--ink) 4%, transparent), transparent);
+}
+
+.r-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.r-label {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.r-sum {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.r-value {
+  color: var(--muted);
+}
+
+.r-value .num {
+  font-size: 32px;
+  font-weight: 500;
+  font-stretch: 112%;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.r-scale {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.go {
+  color: var(--muted);
+  transition: transform 0.25s ease;
+}
+
+.row:hover .go {
+  color: var(--ink);
+  transform: translateX(4px);
+}
+
+.sub {
+  margin: -8px 0 18px;
+}
+
+.sub li {
+  padding: 7px 0;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+.sub li > span:first-child {
+  padding-left: 16px;
+  border-left: 1px solid var(--line-strong);
+}
+
+.sub li .state {
+  grid-column: 4;
+  font-size: 13px;
+}
+
+.sub .num .mono {
+  color: var(--muted);
+}
+
+/* What to do ---------------------------------------------------------- */
+.todo {
+  flex: 1 1 300px;
+}
+
+.todo h2 {
+  padding-block: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.todo ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.todo li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-block: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
+}
+
+.when {
+  display: flex;
+  gap: 14px;
+}
+
+.when a {
+  color: var(--ink);
+  text-underline-offset: 4px;
+}
+
+/* Offline room -------------------------------------------------------- */
+.offline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 640px;
+  padding-top: 28px;
+}
+
+.offline h2 {
+  font-size: clamp(26px, 3vw, 36px);
+}
+
+.offline p {
+  color: var(--ink-2);
+}
+
+/* Breakpoints ---------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .panel-head,
+  .row,
+  .sub li {
+    grid-template-columns: minmax(0, 1.2fr) minmax(100px, 0.7fr) minmax(0, 1fr) 130px;
+  }
+  .go {
+    display: none;
+  }
+}
+
+/* Phones: rooms scroll sideways; each reading stacks its range under the name. */
+@media (max-width: 760px) {
+  .rooms {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .room {
+    flex: 0 0 150px;
+  }
+  .hide-sm {
+    display: none;
+  }
+  .panel-head,
+  .row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .r-scale {
+    grid-column: 1 / -1;
+  }
+  .row > .state {
+    grid-column: 1 / -1;
+  }
+  .sub li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .sub li .state {
+    grid-column: 1 / -1;
+    padding-left: 17px;
+  }
+}

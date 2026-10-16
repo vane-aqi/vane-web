@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vane · Indoor air monitor</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Vane reads the air in your home and tells you in plain words what to do about it." />
+    <meta name="theme-color" content="#f1f2ee" />
+    <!-- Runs before first paint: picks the theme (saved choice, else the system's) and
+         turns on entrance animations unless the visitor prefers reduced motion. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var theme;
+        try {
+          theme = localStorage.getItem('vane.theme');
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        root.dataset.theme = theme;
+        if (theme === 'dark') document.querySelector('meta[name="theme-color"]').content = '#0e1311';
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) root.classList.add('motion');
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

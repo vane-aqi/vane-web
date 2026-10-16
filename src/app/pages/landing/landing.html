@@ -1,0 +1,161 @@
+@let m = home();
+
+<section class="hero">
+  <svg class="air" viewBox="0 0 1440 800" preserveAspectRatio="none" aria-hidden="true">
+    @for (d of airPaths; track $index) {
+      <path [attr.d]="d" pathLength="1000" />
+    }
+  </svg>
+
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <p class="kicker mono">Indoor air monitor · Raccoon Inc.</p>
+      <h1 class="headline">Read the air you live in.</h1>
+      <p class="lede">
+        Vane measures carbon dioxide, temperature, humidity, air pressure and three combustion gases, then tells you in
+        plain words what to do about them.
+      </p>
+      <div class="ctas">
+        <a class="btn" routerLink="/dashboard">Open the dashboard</a>
+        <a class="text-link" href="#measures" (click)="jumpToMeasures($event)">What it measures</a>
+      </div>
+    </div>
+
+    <app-vane class="hero-vane" [play]="heroReady()" [caption]="vaneCaption()" />
+  </div>
+
+  <div class="container readout">
+    <p class="mono readout-label">
+      <span>Sample reading</span>
+      <span>{{ m.name }}</span>
+    </p>
+    <dl class="readout-grid">
+      @for (r of m.readings; track r.id) {
+        <div class="readout-item" [attr.data-tone]="r.tone">
+          <dt class="mono">{{ r.def.shortLabel }}</dt>
+          <dd class="readout-value">
+            <span class="num" [appCountUp]="r.display" [countWhen]="heroReady()"></span>
+            <span class="mono">{{ r.unit }}</span>
+          </dd>
+          <dd class="state">{{ r.status }}</dd>
+        </div>
+      }
+    </dl>
+  </div>
+</section>
+
+<section class="container measures" id="measures" #measures aria-labelledby="measures-heading">
+  <div class="measures-head">
+    <p class="mono" appReveal>What it measures</p>
+    <h2 id="measures-heading" appReveal="lines">Seven readings, each with a reason to care.</h2>
+    <p class="measures-note" appReveal [revealDelay]="0.15">
+      Every value sits on a scale with its healthy range marked, so you can see how far off it is, not just that it is.
+    </p>
+  </div>
+
+  <ol class="measure-list ruled" appReveal="rule">
+    @for (r of m.readings; track r.id) {
+      <li class="measure" [attr.data-tone]="r.tone">
+        <div class="m-title">
+          <span class="mono">{{ r.def.shortLabel }}</span>
+          <h3>{{ r.def.label }}</h3>
+        </div>
+        <p class="m-value">
+          <span class="num" [appCountUp]="r.display"></span>
+          <span class="mono">{{ r.unit }}</span>
+        </p>
+        <p class="m-why">{{ r.def.whyItMatters }}</p>
+        <app-range-scale
+          class="m-scale"
+          [segments]="r.segments"
+          [markerPct]="r.markerPct"
+          [label]="r.def.label + ' is ' + r.status"
+        />
+        <p class="m-foot mono">
+          <span>Healthy {{ r.healthy }}</span>
+          <span class="state">{{ r.status }}</span>
+        </p>
+        @if (r.gases.length) {
+          <ul class="m-gases mono">
+            @for (g of r.gases; track g.def.id) {
+              <li [attr.data-tone]="g.tone">
+                <span>{{ g.def.name }}</span>
+                <span>{{ g.display }} {{ g.unit }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </li>
+    }
+  </ol>
+</section>
+
+<section class="statement" aria-label="What Vane tells you">
+  <div class="container">
+    <p class="mono" appReveal="fade">What it tells you</p>
+    <app-scroll-words class="statement-text" [text]="statement()" />
+    <p class="statement-note" appReveal>Every reading comes with a next step. The most urgent one is always at the top.</p>
+  </div>
+</section>
+
+<section class="container rooms" aria-labelledby="rooms-heading">
+  <div class="rooms-head">
+    <p class="mono" appReveal>Every room</p>
+    <h2 id="rooms-heading" appReveal="lines">One monitor per room. One place to read them all.</h2>
+    <p class="rooms-note" appReveal [revealDelay]="0.15">
+      Put a monitor in each room that matters. The dashboard shows how each one is doing at a glance, and which needs you first.
+    </p>
+  </div>
+
+  <ul class="room-list ruled" appReveal="rule">
+    @for (room of store.monitors(); track room.id; let i = $index) {
+      <li appReveal [revealDelay]="0.1 + i * 0.08">
+        <a class="room" routerLink="/dashboard" [queryParams]="{ room: room.id }">
+          <span class="room-name">{{ room.name }}</span>
+          <span class="room-bars" aria-hidden="true">
+            @for (r of room.readings; track r.id) {
+              <i [attr.data-tone]="r.tone"></i>
+            } @empty {
+              <i class="off"></i>
+            }
+          </span>
+          @if (room.overall; as o) {
+            <span class="state" [attr.data-tone]="o.tone">{{ o.label }}</span>
+          } @else {
+            <span class="state off">Offline</span>
+          }
+          <app-icon class="go" name="arrow-right" [size]="18" />
+        </a>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="container states" aria-labelledby="states-heading">
+  <p class="mono" appReveal>How to read it</p>
+  <h2 id="states-heading" appReveal="lines">Three states, used the same way everywhere.</h2>
+  <div class="band" aria-hidden="true">
+    <span data-tone="good"></span>
+    <span data-tone="watch"></span>
+    <span data-tone="alert"></span>
+  </div>
+  <dl class="states-grid">
+    <div class="state-col" data-tone="good" appReveal>
+      <dt>Clear</dt>
+      <dd>Inside the healthy range. Nothing to do.</dd>
+    </div>
+    <div class="state-col" data-tone="watch" appReveal [revealDelay]="0.1">
+      <dt>Haze</dt>
+      <dd>Drifting out of range. Worth fixing today, but not urgent.</dd>
+    </div>
+    <div class="state-col" data-tone="alert" appReveal [revealDelay]="0.2">
+      <dt>Ember</dt>
+      <dd>Outside safe guidelines. Follow the steps shown right away.</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="container closing">
+  <h2 appReveal="lines">Your readings are ready.</h2>
+  <a class="btn btn-lg" routerLink="/dashboard" appReveal [revealDelay]="0.2">Open the dashboard</a>
+</section>

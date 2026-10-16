@@ -1,0 +1,303 @@
+/* Design tokens. Components read these instead of hard-coding colors. */
+:root {
+  --paper: #f1f2ee;
+  --surface: #ffffff;
+  --ink: #0f1512;
+  --ink-2: #38413c;
+  --muted: #59635d;
+  --line: #d9ddd5;
+  --line-strong: #b4bab1;
+
+  --night: #0f1512;
+  --night-fg: #eef0ea;
+  --night-muted: #9aa59f;
+  /* The needle color. Used sparingly: the intro sweep and focus outlines. */
+  --signal: #c8462f;
+  /* The weather vane's arrowhead and heading dot. */
+  --vane-blue: #2f62a8;
+
+  /*
+   * Status palette, named for what the air looks like:
+   *   Clear (good)  a cold, clean teal
+   *   Haze  (watch) dusty ochre, like smog on the horizon
+   *   Ember (alert) a deep burnt red
+   * Teal against orange stays distinct for colorblind viewers, and each tone also
+   * differs in lightness (haze lightest, ember darkest), so the bars read in grayscale.
+   */
+  --good-fg: #1d5f68;
+  --good-bg: #dcebec;
+  --good-dot: #2b8590;
+  --good-fill: #7fb7bd;
+  --watch-fg: #85590c;
+  --watch-bg: #f3e8d0;
+  --watch-dot: #c39232;
+  --watch-fill: #e2c27e;
+  --alert-fg: #a2321f;
+  --alert-bg: #f5ddd5;
+  --alert-dot: #c8462f;
+  --alert-fill: #c95a40;
+
+  --font-sans: 'Archivo', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* Sections that flip to the opposite theme (the dark statement band on the landing page). */
+:root {
+  --invert: #0f1512;
+  --invert-fg: #eef0ea;
+  --invert-muted: #9aa59f;
+  color-scheme: light;
+}
+
+/* Dark theme. Same names, night values. */
+:root[data-theme='dark'] {
+  --paper: #0e1311;
+  --surface: #151b18;
+  --ink: #e6eae3;
+  --ink-2: #c3cac4;
+  --muted: #8f9a93;
+  --line: #252e2a;
+  --line-strong: #3b4640;
+  --signal: #e0603f;
+  --vane-blue: #6f9fe6;
+
+  --good-fg: #82c3ca;
+  --good-bg: #142729;
+  --good-dot: #44a2ac;
+  --good-fill: #3f8a92;
+  --watch-fg: #e3bf72;
+  --watch-bg: #2a2314;
+  --watch-dot: #cf9f3c;
+  --watch-fill: #a8843a;
+  --alert-fg: #f0927a;
+  --alert-bg: #2e1813;
+  --alert-dot: #e0603f;
+  --alert-fill: #b9533b;
+
+  --invert: #e6eae3;
+  --invert-fg: #0e1311;
+  --invert-muted: #4f5a54;
+  color-scheme: dark;
+}
+
+/* Any element with data-tone="good|watch|alert" gets matching --tone-* colors. */
+[data-tone='good'] {
+  --tone-fg: var(--good-fg);
+  --tone-bg: var(--good-bg);
+  --tone-dot: var(--good-dot);
+  --tone-fill: var(--good-fill);
+}
+[data-tone='watch'] {
+  --tone-fg: var(--watch-fg);
+  --tone-bg: var(--watch-bg);
+  --tone-dot: var(--watch-dot);
+  --tone-fill: var(--watch-fill);
+}
+[data-tone='alert'] {
+  --tone-fg: var(--alert-fg);
+  --tone-bg: var(--alert-bg);
+  --tone-dot: var(--alert-dot);
+  --tone-fill: var(--alert-fill);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.container {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 40px);
+}
+
+/* Instrument-style label: small, mono, uppercase. */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Status text: <span class="state" data-tone="watch">Humid</span> */
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--tone-fg);
+  font-weight: 600;
+  font-size: 14px;
+}
+.state::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  flex: none;
+  background: var(--tone-dot);
+}
+/* Offline: hollow square, muted text. */
+.state.off {
+  color: var(--muted);
+}
+.state.off::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--muted);
+}
+.state.mono,
+.mono .state {
+  font-size: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.btn:hover {
+  background: color-mix(in srgb, var(--ink) 84%, var(--paper));
+}
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+.btn-lg {
+  min-height: 52px;
+  padding: 0 24px;
+  font-size: 15px;
+}
+
+.text-link {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+.text-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* A unit label right after a number: "670 PPM". */
+.num + .mono,
+.num .mono {
+  margin-left: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* A top rule that can draw in from the left (animate --rule from 0 to 1). */
+.ruled {
+  position: relative;
+}
+.ruled::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(var(--rule, 1));
+  transform-origin: left center;
+}
+
+/* Entrance animations (see motion/reveal.ts). The `motion` class is added in
+   index.html only when the visitor hasn't asked for reduced motion. */
+html.motion [data-reveal]:not([data-reveal='rule']) {
+  visibility: hidden;
+}
+html.motion app-vane .draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+/* Theme switch: the new theme grows out of the toggle as a circle. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Lenis smooth scrolling */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

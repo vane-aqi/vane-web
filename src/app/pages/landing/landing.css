@@ -1,0 +1,480 @@
+/* Hero ----------------------------------------------------------------
+ * The hero is exactly one screen tall (minus the header), and the readout
+ * strip must always be visible in it. Type is sized by both width (vw) and
+ * height (vh), so short laptop screens get a smaller headline instead of
+ * pushing the readings below the fold.
+ */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - 69px);
+  overflow: hidden;
+}
+
+/* Kept to the upper part of the hero so the lines never cross the readout numbers. */
+.air {
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: 66%;
+  pointer-events: none;
+}
+
+.air path {
+  fill: none;
+  stroke: var(--line-strong);
+  opacity: 0.55;
+  stroke-width: 1;
+  stroke-dasharray: 220 780;
+  vector-effect: non-scaling-stroke;
+}
+
+.hero-inner {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 24px clamp(32px, 5vw, 96px);
+  padding-top: clamp(20px, 4.5vh, 64px);
+}
+
+html.motion .hero-copy,
+html.motion .readout-label,
+html.motion .readout-item {
+  visibility: hidden;
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(12px, 2.4vh, 28px);
+}
+
+.kicker {
+  color: var(--muted);
+}
+
+.headline {
+  max-width: 11ch;
+  font-size: clamp(44px, min(8.2vw, 11vh), 148px);
+  font-weight: 600;
+  font-stretch: 88%;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+
+.lede {
+  max-width: 40ch;
+  font-size: clamp(16px, min(1.4vw, 2.3vh), 20px);
+  color: var(--ink-2);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+}
+
+.hero-vane {
+  justify-self: center;
+  width: clamp(150px, min(19vw, 32vh), 290px);
+}
+
+.readout {
+  position: relative;
+  padding-block: clamp(16px, 3.5vh, 44px) clamp(16px, 3.5vh, 36px);
+}
+
+.readout-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+
+.readout-grid {
+  --rule: 1;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+}
+
+/* The top rule draws in from the left; GSAP animates --rule from 0 to 1. */
+.readout-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(var(--rule));
+  transform-origin: left;
+}
+
+.readout-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: clamp(10px, 1.8vh, 18px) 16px 0 0;
+}
+
+.readout-item dt {
+  color: var(--muted);
+}
+
+.readout-item dd {
+  margin: 0;
+}
+
+.readout-value {
+  color: var(--muted);
+}
+
+.readout-value .num {
+  font-size: clamp(28px, min(3.6vw, 5.6vh), 56px);
+  font-weight: 500;
+  font-stretch: 112%;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* Section headings ---------------------------------------------------- */
+h2 {
+  font-size: clamp(34px, 4.4vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.measures-head .mono,
+.rooms-head .mono,
+.states > .mono {
+  color: var(--muted);
+}
+
+/* Measures ------------------------------------------------------------ */
+.measures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr);
+  gap: 48px clamp(32px, 6vw, 96px);
+  padding-block: clamp(80px, 14vh, 160px);
+}
+
+.measures-head,
+.rooms-head {
+  position: sticky;
+  top: 40px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.measures-note,
+.rooms-note {
+  max-width: 34ch;
+  color: var(--ink-2);
+}
+
+.measure-list,
+.room-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.measure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px 32px;
+  padding: 32px 0 36px;
+  border-bottom: 1px solid var(--line);
+}
+
+.m-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.m-title .mono {
+  color: var(--muted);
+}
+
+.m-title h3 {
+  font-size: clamp(22px, 2.3vw, 30px);
+}
+
+.m-value {
+  grid-row: span 2;
+  text-align: right;
+  color: var(--muted);
+}
+
+.m-value .num {
+  display: block;
+  color: var(--ink);
+  font-size: clamp(44px, 5.6vw, 84px);
+  font-weight: 500;
+  font-stretch: 112%;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
+}
+
+.m-why {
+  max-width: 46ch;
+  color: var(--ink-2);
+}
+
+.m-scale,
+.m-foot,
+.m-gases {
+  grid-column: 1 / -1;
+}
+
+.m-scale {
+  margin-top: 10px;
+}
+
+.m-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.m-gases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin: 0;
+  padding: 14px 0 0;
+  list-style: none;
+  border-top: 1px dashed var(--line);
+}
+
+.m-gases li {
+  display: flex;
+  gap: 10px;
+}
+
+.m-gases li span:last-child {
+  color: var(--tone-fg);
+  font-weight: 500;
+}
+
+/* Statement (always the opposite theme) ------------------------------ */
+.statement {
+  padding-block: clamp(96px, 18vh, 200px);
+  background: var(--invert);
+  color: var(--invert-fg);
+}
+
+.statement .mono,
+.statement-note {
+  color: var(--invert-muted);
+}
+
+.statement-text {
+  max-width: 22ch;
+  margin-top: 28px;
+  font-size: clamp(30px, 4.8vw, 74px);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+.statement-note {
+  max-width: 40ch;
+  margin-top: 48px;
+  font-size: 18px;
+}
+
+/* Rooms --------------------------------------------------------------- */
+.rooms {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr);
+  gap: 48px clamp(32px, 6vw, 96px);
+  padding-block: clamp(96px, 16vh, 180px) 0;
+}
+
+.room {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 140px 20px;
+  align-items: center;
+  gap: 16px 24px;
+  padding-block: clamp(20px, 3vh, 30px);
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.room-name {
+  font-size: clamp(22px, 2.4vw, 34px);
+  font-weight: 600;
+  font-stretch: 92%;
+  letter-spacing: -0.03em;
+}
+
+.room-bars {
+  display: flex;
+  gap: 4px;
+  height: 22px;
+}
+
+.room-bars i {
+  flex: 1;
+  background: var(--tone-fill);
+  transform-origin: bottom;
+  transition: transform 0.3s ease;
+}
+
+.room-bars i.off {
+  background: repeating-linear-gradient(-45deg, var(--line-strong) 0 1px, transparent 1px 6px);
+}
+
+.room:hover .room-bars i {
+  transform: scaleY(1.25);
+}
+
+.room .go {
+  color: var(--muted);
+  transition: transform 0.25s ease;
+}
+
+.room:hover .go {
+  color: var(--ink);
+  transform: translateX(4px);
+}
+
+/* States -------------------------------------------------------------- */
+.states {
+  padding-block: clamp(96px, 16vh, 180px) 0;
+}
+
+.states h2 {
+  max-width: 16ch;
+  margin-top: 20px;
+}
+
+.band {
+  display: flex;
+  gap: 4px;
+  height: 16px;
+  margin: clamp(40px, 7vh, 72px) 0 28px;
+}
+
+.band span {
+  flex: 1;
+  background: var(--tone-fill);
+}
+
+.states-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 32px;
+  margin: 0;
+}
+
+.state-col dt {
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--tone-fg);
+}
+
+.state-col dd {
+  max-width: 30ch;
+  margin: 8px 0 0;
+  color: var(--ink-2);
+}
+
+/* Closing ------------------------------------------------------------- */
+.closing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding-block: clamp(120px, 20vh, 220px) 0;
+}
+
+.closing h2 {
+  max-width: 10ch;
+  font-size: clamp(48px, 8.5vw, 132px);
+  font-stretch: 88%;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+
+/* Breakpoints ---------------------------------------------------------- */
+
+/* Tablets and narrow laptops: vane leaves the hero; sections stack. */
+@media (max-width: 960px) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-vane {
+    display: none;
+  }
+  .headline {
+    font-size: clamp(44px, min(10vw, 9vh), 104px);
+  }
+  .readout-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .measures,
+  .rooms {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .measures-head,
+  .rooms-head {
+    position: static;
+  }
+}
+
+/* Phones: two readings per row; rooms and states stack. */
+@media (max-width: 640px) {
+  .hero {
+    min-height: auto;
+  }
+  .hero-inner {
+    padding-top: 28px;
+  }
+  .headline {
+    font-size: clamp(42px, 12.5vw, 60px);
+  }
+  .readout-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 8px;
+  }
+  .readout-value .num {
+    font-size: 32px;
+  }
+  .measure {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .m-value {
+    grid-row: auto;
+    text-align: left;
+  }
+  .room {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .room-bars {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    height: 12px;
+  }
+  .room .go {
+    display: none;
+  }
+  .states-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

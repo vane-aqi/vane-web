@@ -1,0 +1,151 @@
+header {
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 12px 40px;
+  flex-wrap: wrap;
+  min-height: 68px;
+}
+
+.brand {
+  font-size: 23px;
+  font-weight: 700;
+  font-stretch: 125%;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 28px;
+  margin-right: auto;
+}
+
+nav a {
+  position: relative;
+  padding-block: 10px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+nav a:hover,
+nav a.active {
+  color: var(--ink);
+}
+
+/* Active page: a short rule under the link that draws in. */
+nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+nav a:hover::after,
+nav a.active::after {
+  transform: scaleX(1);
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.units {
+  display: flex;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.units button {
+  min-width: 42px;
+  min-height: 36px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.units button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.theme {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.theme:hover {
+  border-color: var(--ink);
+}
+
+/* Sun and moon sit on top of each other; the current one turns in, the other turns out. */
+.theme app-icon {
+  position: absolute;
+  inset: 0;
+  width: 18px;
+  height: 18px;
+  margin: auto;
+  transition:
+    transform 0.5s cubic-bezier(0.65, 0, 0.35, 1),
+    opacity 0.3s ease;
+}
+
+.theme .moon,
+.theme.is-dark .sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+
+.theme.is-dark .moon {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 760px) {
+  .bar {
+    padding-block: 10px 0;
+    gap: 4px 16px;
+  }
+  nav {
+    order: 3;
+    width: 100%;
+    margin-right: 0;
+    gap: 22px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav a {
+    font-size: 14px;
+  }
+  .tools {
+    margin-left: auto;
+  }
+}
