@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   template: `
     <footer>
       <div class="container row">
-        <span>© 2025 Gamma Beta Instruments</span>
+        <span>© 2025 Gamma Beta Labs</span>
         <span>Readings are guidance, not medical advice.</span>
       </div>
     </footer>

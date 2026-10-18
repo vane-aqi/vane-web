@@ -30,7 +30,7 @@ import { Vane } from '../shared/vane';
           isn't.
         </p>
         <p class="muted" appReveal [revealDelay]="0.1">
-          Built by Gamma Beta Instruments. Vane began as the Gamma Beta line project of Theta Tau, the professional
+          Built by Gamma Beta Labs. Vane began as the Gamma Beta line project of Theta Tau, the professional
           engineering fraternity.
         </p>
       </div>
