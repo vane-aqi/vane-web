@@ -29,10 +29,7 @@ import { Vane } from '../shared/vane';
           humidity and more. Instead of raw numbers, it tells you whether each reading is healthy and what to do when it
           isn't.
         </p>
-        <p class="muted" appReveal [revealDelay]="0.1">
-          Built by Gamma Beta Labs. Vane began as the Gamma Beta line project of Theta Tau, the professional
-          engineering fraternity.
-        </p>
+        <p class="muted" appReveal [revealDelay]="0.1">Built by GB Labs.</p>
       </div>
 
       <section class="principles" aria-labelledby="principles-heading">

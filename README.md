@@ -1,6 +1,6 @@
 # Vane
 
-An indoor air-quality site and dashboard by Gamma Beta Labs, the Gamma Beta line project of Theta Tau. Built with Angular 22, GSAP and Lenis.
+An indoor air-quality site and dashboard by GB Labs. Built with Angular 22, GSAP and Lenis.
 
 No monitor is connected yet, so the app runs on sample readings. See [Connecting the real device](#connecting-the-real-device).
 
