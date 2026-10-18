@@ -23,7 +23,7 @@ import { DeviceRender } from '../shared/device-render';
 
         <div class="buy ruled" appReveal="rule">
           <div class="price-row" appReveal [revealDelay]="0.1">
-            <span class="price">[PRICE]</span>
+            <span class="price">$150</span>
             <span class="state off">Out of stock</span>
           </div>
           <button class="btn" type="button" disabled appReveal [revealDelay]="0.18">Out of stock</button>

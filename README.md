@@ -107,4 +107,4 @@ Nothing else needs to change. If the device reports extra values, add them to `S
 
 - Room names and sample values in `core/sample-sensor-source.ts`
 - The contact form doesn't send anywhere yet (see the `TODO` in `contact.ts`)
-- `[PRICE]` and `[SHIPPING DETAILS]` on the Shop page (`pages/shop.ts`), and its restock email form doesn't send anywhere yet
+- `[SHIPPING DETAILS]` on the Shop page (`pages/shop.ts`), and its restock email form doesn't send anywhere yet

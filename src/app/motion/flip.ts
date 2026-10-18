@@ -2,13 +2,13 @@ import { DestroyRef, Directive, ElementRef, effect, inject, input, untracked } f
 import { gsap, prefersReducedMotion } from './gsap';
 
 const running = new WeakMap<HTMLElement, gsap.core.Timeline>();
-const NUMBER = /^[\d.,\s-]+$/;
 
 /**
  * Split-flap ("flip clock") change: every character that differs flips over.
  * The top half of the old character falls away, then the bottom half of the
- * new one lands. Unchanged characters stay put. Numbers are right-aligned,
- * so "67" → "19.4" lines its digits up like a real board; words are left-aligned.
+ * new one lands. Unchanged characters stay put. Strings of different lengths
+ * are lined up the way the text sits on screen (from the right for right-aligned
+ * text, otherwise from the left), so nothing jumps when the flip settles.
  *
  * The element's text is rebuilt during the flip and restored to plain text
  * afterwards. Styles for the pieces live in styles.css (.flip-*).
@@ -23,9 +23,10 @@ export function flipText(el: HTMLElement, from: string, to: string): void {
   }
 
   const n = Math.max(from.length, to.length);
-  const numeric = NUMBER.test(from) && NUMBER.test(to);
-  const a = numeric ? from.padStart(n, ' ') : from.padEnd(n, ' ');
-  const b = numeric ? to.padStart(n, ' ') : to.padEnd(n, ' ');
+  const align = getComputedStyle(el).textAlign;
+  const fromRight = align === 'right' || align === 'end';
+  const a = fromRight ? from.padStart(n, ' ') : from.padEnd(n, ' ');
+  const b = fromRight ? to.padStart(n, ' ') : to.padEnd(n, ' ');
   const make = (cls: string, text: string) => {
     const s = document.createElement('span');
     s.className = cls;

@@ -98,7 +98,9 @@ import { Flip } from '../motion/flip';
         inset 0 0 0 1.2cqw #161c19,
         inset 0 2cqw 6cqw rgb(0 0 0 / 0.7);
       color: var(--led);
-      --flip-hinge: #0b100e;
+      /* Solid flaps in the screen color, split by a dark hinge, like a real flip display. */
+      --flip-bg: #0b100e;
+      --flip-hinge: rgb(0 0 0 / 0.85);
       font-family: var(--font-mono);
       text-shadow: 0 0 2.2cqw color-mix(in srgb, var(--led) 50%, transparent);
       overflow: hidden;

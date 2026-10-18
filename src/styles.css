@@ -277,6 +277,9 @@ a {
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
+  /* Set --flip-bg on a container to give the pieces solid "tiles" that cover each
+     other like a real split-flap board (used on the device screen). */
+  background: var(--flip-bg, transparent);
 }
 .flip-top {
   clip-path: inset(-20% -10% 50% -10%);
