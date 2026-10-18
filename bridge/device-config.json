@@ -1,0 +1,13 @@
+{
+  "server": {
+    "port": 3000
+  },
+  "device": {
+    "baudRate": 9600,
+    "staleAfterMs": 15000,
+    "reconnectAttempts": 3,
+    "reconnectDelayMs": 5000,
+    "temperatureUnit": "celsius"
+  },
+  "monitors": []
+}

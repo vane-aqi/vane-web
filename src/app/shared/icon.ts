@@ -35,6 +35,13 @@ import { IconName } from '../core/models';
           <path d="M3 12h16a3 3 0 1 1-3 3" />
           <path d="M3 16h7" />
         }
+        @case ('particles') {
+          <circle cx="7" cy="8" r="1.6" />
+          <circle cx="15" cy="6" r="1" />
+          <circle cx="17" cy="13" r="2" />
+          <circle cx="9" cy="16" r="1.2" />
+          <circle cx="13" cy="19" r="0.8" />
+        }
         @case ('arrow-right') {
           <path d="M5 12h14M13 6l6 6-6 6" />
         }

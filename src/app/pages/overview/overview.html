@@ -1,10 +1,15 @@
 @let m = monitor();
 
 <div class="container page">
-  @if (store.isSample) {
+  @if (store.dataSource() === 'sample') {
     <p class="sample mono">
       <span>Sample data. No monitors connected yet.</span>
       <a routerLink="/monitors">Connect a monitor</a>
+    </p>
+  } @else if (store.dataSource() === 'mock') {
+    <p class="sample mono">
+      <span>Test data from the bridge's mock monitors.</span>
+      <a routerLink="/monitors">Manage monitors</a>
     </p>
   }
 
@@ -41,8 +46,8 @@
       <p class="mono muted">
         @if (!m.online) {
           Offline
-        } @else if (store.isSample) {
-          Sample reading
+        } @else if (store.isSample()) {
+          {{ store.readingLabel() }}
         } @else {
           Updated {{ m.takenAt | date: 'shortTime' }}
         }
@@ -74,10 +79,10 @@
                   <span class="r-label">{{ r.def.label }}</span>
                   <span class="r-sum">{{ r.def.summary }}</span>
                 </span>
-                <span class="r-value"><span class="num" [appFlip]="r.display"></span><span class="mono" [appFlip]="r.unit"></span></span>
+                <span class="r-value"><span class="num" [appFlip]="r.display"></span><span class="mono keep-case" [appFlip]="r.unit"></span></span>
                 <span class="r-scale">
                   <app-range-scale [segments]="r.segments" [markerPct]="r.markerPct" [label]="'Healthy range ' + r.healthy" />
-                  <span class="mono muted" [appFlip]="r.healthy"></span>
+                  <span class="mono muted keep-case" [appFlip]="r.healthy"></span>
                 </span>
                 <span class="state">{{ r.status }}</span>
                 <app-icon class="go" name="arrow-right" [size]="18" />
@@ -87,7 +92,7 @@
                   @for (g of r.gases; track g.def.id) {
                     <li [attr.data-tone]="g.tone">
                       <span>{{ g.def.name }}</span>
-                      <span class="num"><span [appFlip]="g.display"></span><span class="mono">{{ g.unit }}</span></span>
+                      <span class="num"><span [appFlip]="g.display"></span><span class="mono keep-case">{{ g.unit }}</span></span>
                       <span class="state"><span class="state-text">{{ g.status }}</span></span>
                     </li>
                   }

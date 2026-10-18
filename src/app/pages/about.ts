@@ -25,11 +25,14 @@ import { Vane } from '../shared/vane';
 
       <div class="story">
         <p appReveal>
-          Vane pairs with small indoor monitors, one per room, that measure carbon dioxide, temperature, humidity, air
-          pressure and three combustion gases. Instead of raw numbers, it tells you whether each reading is healthy and
-          what to do when it isn't.
+          Vane pairs with small indoor monitors, one per room, that measure particles, carbon dioxide, temperature,
+          humidity and more. Instead of raw numbers, it tells you whether each reading is healthy and what to do when it
+          isn't.
         </p>
-        <p class="muted" appReveal [revealDelay]="0.1">Built by Raccoon Inc.</p>
+        <p class="muted" appReveal [revealDelay]="0.1">
+          Built by Gamma Beta Instruments. Vane began as the Gamma Beta line project of Theta Tau, the professional
+          engineering fraternity.
+        </p>
       </div>
 
       <section class="principles" aria-labelledby="principles-heading">

@@ -1,4 +1,7 @@
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { BridgeSensorSource } from './bridge-sensor-source';
+import { MonitorFeed } from './models';
 import { markerPct, overallHealth, segmentsFor, zoneFor } from './evaluate';
 import { METRIC_DEFINITIONS } from './metric-definitions';
 import { Preferences } from './preferences';
@@ -91,5 +94,38 @@ describe('ReadingsStore with sample data', () => {
   it('keeps the decimal on small gas values', () => {
     const isoprene = store.monitor('bedroom').readings.find((r) => r.id === 'gases')!.gases[1];
     expect(isoprene.display).toBe('0.6');
+  });
+});
+
+describe('A monitor that only reports some sensors', () => {
+  // What the current hardware sends: temperature, humidity, PM2.5 and PM10.
+  class DeviceLikeSource extends SampleSensorSource {
+    override readonly monitors = signal<MonitorFeed[]>([
+      {
+        id: 'den',
+        name: 'Den',
+        online: true,
+        snapshot: { temperatureC: 25.5, humidityPct: 60, pm25: 35, pm10: 50, takenAt: new Date() },
+      },
+    ]).asReadonly();
+  }
+
+  it('shows only the readings it reports, and rates them', () => {
+    TestBed.configureTestingModule({ providers: [{ provide: SensorSource, useClass: DeviceLikeSource }] });
+    const den = TestBed.inject(ReadingsStore).monitor('den');
+    expect(den.readings.map((r) => r.id)).toEqual(['pm25', 'pm10', 'temperature', 'humidity']);
+    expect(den.readings.find((r) => r.id === 'pm25')!.status).toBe('Moderate');
+    expect(den.readings.find((r) => r.id === 'pm10')!.status).toBe('Good');
+    expect(den.overall?.label).toBe('Fair');
+  });
+});
+
+describe('BridgeSensorSource without a running bridge', () => {
+  it('falls back to the sample rooms and cannot connect', async () => {
+    TestBed.configureTestingModule({ providers: [{ provide: SensorSource, useClass: BridgeSensorSource }] });
+    const store = TestBed.inject(ReadingsStore);
+    expect(store.isSample()).toBe(true);
+    expect(store.canConnect()).toBe(false);
+    expect(store.monitors().map((m) => m.id)).toEqual(['living-room', 'bedroom', 'kitchen', 'office']);
   });
 });

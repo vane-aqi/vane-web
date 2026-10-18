@@ -17,8 +17,8 @@ import { DeviceRender } from '../shared/device-render';
         <p class="mono muted" appReveal>Shop</p>
         <h1 appReveal="lines">Vane Monitor</h1>
         <p class="lede" appReveal [revealDelay]="0.12">
-          One per room. Measures carbon dioxide, temperature, humidity, air pressure and three combustion gases, and
-          reports to your Vane dashboard.
+          One per room. Measures fine and coarse particles, carbon dioxide, temperature, humidity and more, and reports
+          to your Vane dashboard.
         </p>
 
         <div class="buy ruled" appReveal="rule">
@@ -54,7 +54,7 @@ import { DeviceRender } from '../shared/device-render';
         <dl class="facts ruled" appReveal="rule">
           <div appReveal [revealDelay]="0.1">
             <dt class="mono">Measures</dt>
-            <dd>CO₂, temperature, humidity, air pressure, carbon monoxide, isoprene and ethane</dd>
+            <dd>PM2.5, PM10, CO₂, temperature, humidity, air pressure, carbon monoxide, isoprene and ethane</dd>
           </div>
           <div appReveal [revealDelay]="0.16">
             <dt class="mono">Works with</dt>

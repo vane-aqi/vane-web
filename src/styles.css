@@ -172,6 +172,14 @@ a {
   text-transform: uppercase;
 }
 
+/* Units and ranges keep their real case inside mono labels: "µg/m³" must not become
+   "MG/M³" (uppercase µ looks like M), and "hPa" must not become "HPA". */
+.keep-case,
+.mono .keep-case {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
 /* Status text: <span class="state" data-tone="watch">Humid</span> */
 .state {
   display: inline-flex;

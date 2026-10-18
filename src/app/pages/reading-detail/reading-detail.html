@@ -33,7 +33,7 @@
             [label]="r.def.label + ' is ' + r.display + ' ' + r.unit + ', ' + r.status"
           >
             <span class="value" [appFlip]="r.display"></span>
-            <span class="unit mono" [appFlip]="r.unit"></span>
+            <span class="unit mono keep-case" [appFlip]="r.unit"></span>
           </app-thermometer>
         } @else {
           <app-arc-gauge
@@ -43,11 +43,11 @@
             [label]="r.def.label + ' is ' + r.display + ' ' + r.unit + ', ' + r.status"
           >
             <span class="value" [appFlip]="r.display"></span>
-            <span class="unit mono" [appFlip]="r.id === 'gases' ? r.unit + ' CO' : r.unit"></span>
+            <span class="unit mono keep-case" [appFlip]="r.id === 'gases' ? r.unit + ' CO' : r.unit"></span>
           </app-arc-gauge>
         }
 
-        <p class="scale mono">
+        <p class="scale mono keep-case">
           <span class="end" [appFlip]="r.scaleMin"></span>
           <span class="healthy" [appFlip]="'Healthy ' + r.healthy"></span>
           <span class="end" [appFlip]="r.scaleMax"></span>
@@ -84,12 +84,12 @@
               <li [attr.data-tone]="g.tone">
                 <div class="gas-top">
                   <h2>{{ g.def.name }}</h2>
-                  <p class="gas-value"><span class="num" [appFlip]="g.display"></span><span class="mono">{{ g.unit }}</span></p>
+                  <p class="gas-value"><span class="num" [appFlip]="g.display"></span><span class="mono keep-case">{{ g.unit }}</span></p>
                 </div>
                 <app-range-scale [segments]="g.segments" [markerPct]="g.markerPct" [label]="g.def.name + ' is ' + g.status" />
                 <p class="gas-meta">
                   <span class="state">{{ g.status }}</span>
-                  <span class="mono">Typical {{ g.def.typical }}</span>
+                  <span class="mono keep-case">Typical {{ g.def.typical }}</span>
                 </p>
                 <p class="gas-about">{{ g.def.about }}</p>
               </li>

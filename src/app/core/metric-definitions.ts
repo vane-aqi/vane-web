@@ -119,6 +119,91 @@ export const METRIC_DEFINITIONS: MetricDefinition[] = [
     },
   },
   {
+    id: 'pm25',
+    label: 'Fine particles',
+    shortLabel: 'PM2.5',
+    unit: 'µg/m³',
+    decimals: 1,
+    icon: 'particles',
+    summary: 'Smoke, cooking fumes and exhaust.',
+    about:
+      'PM2.5 is airborne particles 2.5 micrometers across or smaller: smoke, cooking fumes, candle soot and traffic exhaust.',
+    whyItMatters:
+      'They are small enough to reach deep into the lungs and even the bloodstream, and long-term exposure is linked to heart and lung disease.',
+    healthyRange:
+      'Below 9 µg/m³ is good, following the US EPA air quality scale updated in 2024. From 35.5 µg/m³ it is unhealthy for sensitive groups.',
+    read: (s) => s.pm25,
+    scale: {
+      min: 0,
+      max: 75,
+      zones: [
+        {
+          from: 0,
+          to: 9,
+          tone: 'good',
+          status: 'Good',
+          advice: 'Nothing to do. Particle levels are low.',
+        },
+        {
+          from: 9,
+          to: 35.5,
+          tone: 'watch',
+          status: 'Moderate',
+          advice: 'Run an air purifier with a HEPA filter, and use the range hood when cooking until it drops below 9 µg/m³.',
+        },
+        {
+          from: 35.5,
+          to: 75,
+          tone: 'alert',
+          status: 'Unhealthy',
+          advice:
+            'Run an air purifier on high and avoid frying, candles or anything burning. If it is smoky outside, keep windows closed.',
+        },
+      ],
+    },
+  },
+  {
+    id: 'pm10',
+    label: 'Coarse particles',
+    shortLabel: 'PM10',
+    unit: 'µg/m³',
+    decimals: 0,
+    icon: 'particles',
+    summary: 'Dust, pollen and mold spores.',
+    about: 'PM10 is airborne particles up to 10 micrometers across: household dust, pollen and mold spores.',
+    whyItMatters: 'They irritate the eyes, nose and throat, and can set off asthma and allergies.',
+    healthyRange:
+      'Below 55 µg/m³ is good on the US EPA scale. From 155 µg/m³ it is unhealthy for sensitive groups.',
+    read: (s) => s.pm10,
+    scale: {
+      min: 0,
+      max: 250,
+      zones: [
+        {
+          from: 0,
+          to: 55,
+          tone: 'good',
+          status: 'Good',
+          advice: 'Nothing to do. Dust levels are low.',
+        },
+        {
+          from: 55,
+          to: 155,
+          tone: 'watch',
+          status: 'Moderate',
+          advice: 'Dust is up. Vacuum with a HEPA filter, wipe surfaces and run an air purifier.',
+        },
+        {
+          from: 155,
+          to: 250,
+          tone: 'alert',
+          status: 'Unhealthy',
+          advice: 'Run an air purifier on high. If the dust or pollen is coming from outside, keep windows closed.',
+        },
+      ],
+    },
+  },
+  {
     id: 'temperature',
     label: 'Temperature',
     shortLabel: 'Temperature',

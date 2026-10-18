@@ -1,10 +1,11 @@
 /** How healthy a value is. Drives every color and label in the UI. */
 export type Tone = 'good' | 'watch' | 'alert';
 
-export type MetricId = 'co2' | 'temperature' | 'humidity' | 'pressure' | 'gases';
+export type MetricId = 'co2' | 'pm25' | 'pm10' | 'temperature' | 'humidity' | 'pressure' | 'gases';
 export type GasId = 'co' | 'isoprene' | 'ethane';
 export type TemperatureUnit = 'F' | 'C';
 export type ConnectionState = 'disconnected' | 'connecting' | 'connected';
+export type DataSource = 'sample' | 'mock' | 'live';
 
 export type IconName =
   | 'co2'
@@ -12,6 +13,7 @@ export type IconName =
   | 'humidity'
   | 'pressure'
   | 'gases'
+  | 'particles'
   | 'arrow-right'
   | 'arrow-left'
   | 'device'
@@ -22,17 +24,22 @@ export type IconName =
   | 'moon';
 
 /**
- * One raw reading from the monitor, in the units the hardware reports.
- * When the real device arrives, map its payload onto this shape.
+ * One raw reading from a monitor. Every sensor is optional: a monitor only
+ * reports what it has (the current hardware sends temperature, humidity,
+ * PM2.5 and PM10), and the app shows exactly those readings.
  */
 export interface SensorSnapshot {
-  co2Ppm: number;
-  temperatureC: number;
-  humidityPct: number;
-  pressureHpa: number;
-  coPpm: number;
-  isoprenePpb: number;
-  ethanePpb: number;
+  co2Ppm?: number;
+  temperatureC?: number;
+  humidityPct?: number;
+  pressureHpa?: number;
+  /** Fine particles, µg/m³. */
+  pm25?: number;
+  /** Coarse particles, µg/m³. */
+  pm10?: number;
+  coPpm?: number;
+  isoprenePpb?: number;
+  ethanePpb?: number;
   takenAt: Date;
 }
 
@@ -78,7 +85,7 @@ export interface MetricDefinition {
   whyItMatters: string;
   healthyRange: string;
   scale: Scale;
-  read: (snapshot: SensorSnapshot) => number;
+  read: (snapshot: SensorSnapshot) => number | undefined;
 }
 
 export interface GasDefinition {
@@ -88,7 +95,7 @@ export interface GasDefinition {
   about: string;
   typical: string;
   scale: Scale;
-  read: (snapshot: SensorSnapshot) => number;
+  read: (snapshot: SensorSnapshot) => number | undefined;
 }
 
 /** A value after it has been checked against its scale and formatted. */
@@ -132,6 +139,23 @@ export interface MonitorFeed {
   online: boolean;
   /** Latest reading, or null if it has never reported or is offline. */
   snapshot: SensorSnapshot | null;
+  /** True for made-up data (sample rooms, or the bridge's mock monitors). */
+  simulated?: boolean;
+  /** The serial port it's plugged into, when it comes from the bridge. */
+  portPath?: string;
+}
+
+/** A serial port the bridge can see, for the "connect a monitor" flow. */
+export interface SerialPortInfo {
+  path: string;
+  manufacturer: string | null;
+  inUse: boolean;
+}
+
+export interface ConnectRequest {
+  portPath: string;
+  /** The room it's going in, e.g. "Bedroom". */
+  name: string;
 }
 
 /** A monitor after its readings have been evaluated. What the screens use. */

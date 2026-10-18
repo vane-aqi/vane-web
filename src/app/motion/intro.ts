@@ -39,7 +39,7 @@ import { SmoothScroll } from './smooth-scroll';
             @for (r of readouts(); track r.label) {
               <div>
                 <dt class="mono">{{ r.label }}</dt>
-                <dd><span class="v" [attr.data-to]="r.value">0</span> <span class="mono">{{ r.unit }}</span></dd>
+                <dd><span class="v" [attr.data-to]="r.value">0</span> <span class="mono keep-case">{{ r.unit }}</span></dd>
               </div>
             }
           </dl>

@@ -48,6 +48,12 @@ export class Landing {
 
   /** The room the hero and the walkthrough describe. */
   protected readonly home = this.store.primary;
+
+  /** Up to five readings for the hero strip, most telling first, from whatever the monitor reports. */
+  protected readonly heroReadings = computed(() => {
+    const order = ['co2', 'pm25', 'temperature', 'humidity', 'gases', 'pm10', 'pressure'];
+    return [...this.home().readings].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id)).slice(0, 5);
+  });
   protected readonly airPaths = AIR_PATHS;
   /** Flips true once the hero has animated in; starts the counters and the vane. */
   protected readonly heroReady = signal(false);

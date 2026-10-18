@@ -11,7 +11,16 @@ import {
   zoneFor,
 } from './evaluate';
 import { GAS_DEFINITIONS, METRIC_DEFINITIONS } from './metric-definitions';
-import { GasReading, MetricDefinition, Monitor, MonitorFeed, Reading, SensorSnapshot, Tone } from './models';
+import {
+  ConnectRequest,
+  GasReading,
+  MetricDefinition,
+  Monitor,
+  MonitorFeed,
+  Reading,
+  SensorSnapshot,
+  Tone,
+} from './models';
 import { Preferences } from './preferences';
 import { SensorSource } from './sensor-source';
 
@@ -42,7 +51,14 @@ export class ReadingsStore {
   private readonly prefs = inject(Preferences);
 
   readonly connection = this.source.connection;
-  readonly isSample = this.source.isSample;
+  readonly dataSource = this.source.dataSource;
+  /** True unless the readings come from real monitors. */
+  readonly isSample = computed(() => this.dataSource() !== 'live');
+  /** A short label for the readings, e.g. "Sample reading". */
+  readonly readingLabel = computed(() =>
+    ({ sample: 'Sample reading', mock: 'Test reading', live: 'Live reading' })[this.dataSource()],
+  );
+  readonly canConnect = this.source.canConnect;
 
   readonly monitors = computed<Monitor[]>(() => this.source.monitors().map((feed) => this.toMonitor(feed)));
 
@@ -55,13 +71,24 @@ export class ReadingsStore {
     return all.find((m) => m.id === id) ?? all.find((m) => m.online) ?? all[0] ?? NO_MONITOR;
   }
 
-  connect() {
-    return this.source.connect();
+  listPorts() {
+    return this.source.listPorts();
+  }
+
+  connect(request: ConnectRequest) {
+    return this.source.connect(request);
+  }
+
+  disconnect(monitorId: string) {
+    return this.source.disconnect(monitorId);
   }
 
   private toMonitor(feed: MonitorFeed): Monitor {
     const snapshot = feed.online ? feed.snapshot : null;
-    const readings = snapshot ? METRIC_DEFINITIONS.map((def) => this.evaluate(def, snapshot)) : [];
+    // Only the readings this monitor actually reports.
+    const readings = snapshot
+      ? METRIC_DEFINITIONS.filter((def) => def.read(snapshot) !== undefined).map((def) => this.evaluate(def, snapshot))
+      : [];
     return {
       id: feed.id,
       name: feed.name,
@@ -74,7 +101,7 @@ export class ReadingsStore {
   }
 
   private evaluate(def: MetricDefinition, snapshot: SensorSnapshot): Reading {
-    const value = def.read(snapshot);
+    const value = def.read(snapshot) ?? 0;
     const zone = zoneFor(def.scale, value);
     const goodZone = def.scale.zones.find((z) => z.tone === 'good');
     const shown = this.display(def, value);
@@ -112,8 +139,8 @@ export class ReadingsStore {
   }
 
   private evaluateGases(snapshot: SensorSnapshot): GasReading[] {
-    return GAS_DEFINITIONS.map((def) => {
-      const value = def.read(snapshot);
+    return GAS_DEFINITIONS.filter((def) => def.read(snapshot) !== undefined).map((def) => {
+      const value = def.read(snapshot) ?? 0;
       const zone = zoneFor(def.scale, value);
       return {
         def,

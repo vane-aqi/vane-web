@@ -9,11 +9,11 @@
 
   <div class="container hero-inner">
     <div class="hero-copy">
-      <p class="kicker mono">Indoor air monitor · Raccoon Inc.</p>
+      <p class="kicker mono">Indoor air monitor · Gamma Beta Instruments</p>
       <h1 class="headline">Read the air you live in.</h1>
       <p class="lede">
-        Vane measures carbon dioxide, temperature, humidity, air pressure and three combustion gases, then tells you in
-        plain words what to do about them.
+        Vane measures the air in every room: particles, carbon dioxide, temperature, humidity and more. Then it tells
+        you in plain words what to do about it.
       </p>
       <div class="ctas">
         <a class="btn" routerLink="/dashboard">Open the dashboard</a>
@@ -26,16 +26,16 @@
 
   <div class="container readout">
     <p class="mono readout-label">
-      <span>Sample reading</span>
+      <span>{{ store.readingLabel() }}</span>
       <span>{{ m.name }}</span>
     </p>
     <dl class="readout-grid">
-      @for (r of m.readings; track r.id) {
+      @for (r of heroReadings(); track r.id) {
         <div class="readout-item" [attr.data-tone]="r.tone">
           <dt class="mono">{{ r.def.shortLabel }}</dt>
           <dd class="readout-value">
             <span class="num" [appCountUp]="r.display" [countWhen]="heroReady()"></span>
-            <span class="mono" [appFlip]="r.unit"></span>
+            <span class="mono keep-case" [appFlip]="r.unit"></span>
           </dd>
           <dd class="state">{{ r.status }}</dd>
         </div>
@@ -47,7 +47,7 @@
 <section class="container measures" id="measures" #measures aria-labelledby="measures-heading">
   <div class="measures-head">
     <p class="mono" appReveal>What it measures</p>
-    <h2 id="measures-heading" appReveal="lines">Seven readings, each with a reason to care.</h2>
+    <h2 id="measures-heading" appReveal="lines">Every reading, with a reason to care.</h2>
     <p class="measures-note" appReveal [revealDelay]="0.15">
       Every value sits on a scale with its healthy range marked, so you can see how far off it is, not just that it is.
     </p>
@@ -62,7 +62,7 @@
         </div>
         <p class="m-value">
           <span class="num" [appCountUp]="r.display"></span>
-          <span class="mono" [appFlip]="r.unit"></span>
+          <span class="mono keep-case" [appFlip]="r.unit"></span>
         </p>
         <p class="m-why">{{ r.def.whyItMatters }}</p>
         <app-range-scale
@@ -72,7 +72,7 @@
           [label]="r.def.label + ' is ' + r.status"
         />
         <p class="m-foot mono">
-          <span [appFlip]="'Healthy ' + r.healthy"></span>
+          <span class="keep-case" [appFlip]="'Healthy ' + r.healthy"></span>
           <span class="state">{{ r.status }}</span>
         </p>
         @if (r.gases.length) {
@@ -80,7 +80,7 @@
             @for (g of r.gases; track g.def.id) {
               <li [attr.data-tone]="g.tone">
                 <span>{{ g.def.name }}</span>
-                <span>{{ g.display }} {{ g.unit }}</span>
+                <span class="keep-case">{{ g.display }} {{ g.unit }}</span>
               </li>
             }
           </ul>

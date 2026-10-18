@@ -1,6 +1,6 @@
 # Vane
 
-An indoor air-quality site and dashboard by Raccoon Inc. Built with Angular 22, GSAP and Lenis.
+An indoor air-quality site and dashboard by Gamma Beta Instruments, the Gamma Beta line project of Theta Tau. Built with Angular 22, GSAP and Lenis.
 
 No monitor is connected yet, so the app runs on sample readings. See [Connecting the real device](#connecting-the-real-device).
 
@@ -10,6 +10,7 @@ No monitor is connected yet, so the app runs on sample readings. See [Connecting
 npm install
 npm start        # http://localhost:4200
 npm test         # unit tests (Vitest)
+npm test --prefix bridge   # bridge tests
 npm run build    # production build in dist/
 ```
 
@@ -86,22 +87,51 @@ Two more you'll see in the motion code: `afterNextRender()` runs code once the p
 
 ## Connecting the real device
 
-Everything flows through one abstract class, `core/sensor-source.ts`:
+Step-by-step guide for engineers (firmware format, ports, configuration, thresholds, troubleshooting): [docs/connecting-a-monitor.md](docs/connecting-a-monitor.md).
 
-```ts
-abstract class SensorSource {
-  monitors: Signal<MonitorFeed[]>; // one per room: { id, name, online, snapshot }
-  connection: Signal<'disconnected' | 'connecting' | 'connected'>; // the "add a monitor" flow
-  isSample: boolean;
-  connect(): Promise<void>;
-  disconnect(): void;
-}
+The monitor plugs in by USB and prints one JSON object per line over serial (9600 baud):
+
+```json
+{"temperature": 25.5, "humidity": 60, "pm25": 35, "pm10": 50}
 ```
 
-1. Create e.g. `core/device-sensor-source.ts` that extends `SensorSource` and talks to the hardware (HTTP polling, WebSocket, Web Bluetooth, whatever the device supports). Convert each device's payload to a `SensorSnapshot`, wrap it in a `MonitorFeed` with the room name, and `.set()` the list on a signal.
-2. In `app.config.ts`, change `useClass: SampleSensorSource` to your new class.
+Temperature is in °C (change `device.temperatureUnit` in `bridge/device-config.json` if the firmware sends °F). If newer firmware adds `co2`, `pressure`, `co`, `isoprene` or `ethane`, those readings show up automatically. The app only shows what a monitor actually reports.
 
-Nothing else needs to change. If the device reports extra values, add them to `SensorSnapshot` and add a definition in `metric-definitions.ts`. Thresholds live there too, so you can tune them after calibrating.
+Browsers can't read serial ports, so a small Node server in `bridge/` reads them and streams readings to the web app.
+
+```
+monitor ──USB/serial──▶ bridge (Node, :3000) ──server-sent events──▶ web app
+```
+
+**Run it**
+
+```bash
+npm install --prefix bridge   # once
+npm run bridge                # terminal 1: reads real serial ports
+npm start                     # terminal 2: the app; /api is proxied to the bridge
+```
+
+Then open **Monitors**, pick the monitor's port, name the room and connect. Add one monitor per room the same way. To connect monitors on start-up instead, list them in `bridge/device-config.json`:
+
+```json
+"monitors": [{ "name": "Bedroom", "portPath": "/dev/tty.usbserial-1410" }]
+```
+
+**No hardware yet?** `npm run bridge:mock` starts the bridge with two fake monitors on fake ports, so the whole connect flow can be tried. When the bridge isn't running at all, the app shows the sample rooms instead.
+
+**One process for production:** run `npm run build`, then `npm run bridge`. The bridge also serves the built app at http://localhost:3000.
+
+**Bridge API** (also documented at the top of `bridge/server.js`):
+
+| | |
+| --- | --- |
+| `GET /api/ports` | serial ports on this computer |
+| `GET /api/monitors` | every monitor and its latest reading |
+| `GET /api/monitors/stream` | the same list, pushed on every change |
+| `POST /api/monitors` | connect `{ "portPath": "...", "name": "Bedroom" }` |
+| `DELETE /api/monitors/:id` | disconnect |
+
+In the app, `core/bridge-sensor-source.ts` talks to the bridge and `core/sample-sensor-source.ts` makes up data; `app.config.ts` picks which one to use. Thresholds and copy for every reading (including PM2.5 and PM10, based on the US EPA's 2024 air quality scale) live in `core/metric-definitions.ts`.
 
 ## Placeholders to fill in
 
