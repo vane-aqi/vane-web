@@ -82,6 +82,10 @@ textarea {
 textarea {
   resize: vertical;
 }
+::placeholder {
+  color: var(--muted);
+  opacity: 0.75;
+}
 input:focus,
 select:focus,
 textarea:focus {
