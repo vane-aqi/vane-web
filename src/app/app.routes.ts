@@ -3,7 +3,7 @@ import { METRIC_DEFINITIONS } from './core/metric-definitions';
 import { Landing } from './pages/landing/landing';
 
 export const routes: Routes = [
-  { path: '', component: Landing, title: 'Vane · Indoor air monitor' },
+  { path: '', component: Landing, title: 'Vane – Indoor Air Quality Dashboard' },
   {
     path: 'dashboard',
     // loadComponent splits the page into its own bundle, downloaded on first visit.
