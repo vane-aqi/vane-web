@@ -10,7 +10,8 @@ import { DeviceRender } from '../shared/device-render';
   imports: [ReactiveFormsModule, DeviceRender, Reveal],
   template: `
     <div class="container page">
-      <div class="art glass" appReveal="fade">
+      <!-- data-reveal keeps it hidden until its entrance (in the constructor) plays. -->
+      <div class="art glass" data-reveal="up">
         <app-device-render class="device" />
       </div>
 
@@ -248,14 +249,26 @@ export class Shop {
   constructor() {
     const host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
     let ctx: gsap.Context | undefined;
-    // The monitor's entrance: it rises onto its surface with a slight tilt and
-    // settles, its shadow grows beneath it, then the screen powers on.
+    // The product shot's entrance: the glass stage rises and scales up into place,
+    // the monitor lands on it with a slight tilt and settles, its shadow grows
+    // beneath it, then the screen powers on.
     afterNextRender(() => {
-      if (prefersReducedMotion()) return;
+      const art = host.querySelector<HTMLElement>('.art');
+      if (prefersReducedMotion()) {
+        if (art) art.style.visibility = 'visible';
+        return;
+      }
       ctx = gsap.context(() => {
         gsap
-          .timeline({ delay: 0.2 })
-          .from('app-device-render', {
+          .timeline({ delay: 0.05 })
+          .fromTo(
+            '.art',
+            { autoAlpha: 0, y: 40, scale: 0.94 },
+            { autoAlpha: 1, y: 0, scale: 1, duration: 0.9, ease: 'power3.out', clearProps: 'transform' },
+          )
+          .from(
+            'app-device-render',
+            {
             autoAlpha: 0,
             y: 56,
             scale: 0.9,
@@ -263,9 +276,11 @@ export class Shop {
             duration: 1.1,
             ease: 'back.out(1.3)',
             clearProps: 'transform,opacity,visibility',
-          })
-          .from('.ground', { autoAlpha: 0, scaleX: 0.4, duration: 0.9, ease: 'power3.out' }, 0.2)
-          .from('.screen > *', { autoAlpha: 0, y: 6, duration: 0.45, ease: 'power2.out', stagger: 0.08 }, 0.8);
+            },
+            0.3,
+          )
+          .from('.ground', { autoAlpha: 0, scaleX: 0.4, duration: 0.9, ease: 'power3.out' }, 0.5)
+          .from('.screen > *', { autoAlpha: 0, y: 6, duration: 0.45, ease: 'power2.out', stagger: 0.08 }, 1.1);
       }, host);
     });
     inject(DestroyRef).onDestroy(() => ctx?.revert());
