@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, afterNextRender, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { gsap, prefersReducedMotion } from '../motion/gsap';
 import { Reveal } from '../motion/reveal';
 import { DeviceRender } from '../shared/device-render';
 
@@ -243,6 +244,32 @@ export class Shop {
 
   protected readonly subscribed = signal(false);
   protected readonly form = this.fb.group({ email: ['', [Validators.required, Validators.email]] });
+
+  constructor() {
+    const host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
+    let ctx: gsap.Context | undefined;
+    // The monitor's entrance: it rises onto its surface with a slight tilt and
+    // settles, its shadow grows beneath it, then the screen powers on.
+    afterNextRender(() => {
+      if (prefersReducedMotion()) return;
+      ctx = gsap.context(() => {
+        gsap
+          .timeline({ delay: 0.2 })
+          .from('app-device-render', {
+            autoAlpha: 0,
+            y: 56,
+            scale: 0.9,
+            rotation: -4,
+            duration: 1.1,
+            ease: 'back.out(1.3)',
+            clearProps: 'transform,opacity,visibility',
+          })
+          .from('.ground', { autoAlpha: 0, scaleX: 0.4, duration: 0.9, ease: 'power3.out' }, 0.2)
+          .from('.screen > *', { autoAlpha: 0, y: 6, duration: 0.45, ease: 'power2.out', stagger: 0.08 }, 0.8);
+      }, host);
+    });
+    inject(DestroyRef).onDestroy(() => ctx?.revert());
+  }
 
   protected showError(): boolean {
     const email = this.form.controls.email;
