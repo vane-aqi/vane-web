@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     <footer>
       <div class="container row">
         <span>© 2025 GB Labs</span>
-        <span>Readings are guidance, not medical advice.</span>
+        <span>Know your air, breathe easier. Vane is for everyday awareness, not medical advice.</span>
       </div>
     </footer>
   `,

@@ -1,21 +1,13 @@
 @let m = monitor();
 
 <div class="container page">
-  @if (store.dataSource() === 'sample') {
-    <p class="sample mono">
-      <span>Sample data. No monitors connected yet.</span>
-      <a routerLink="/monitors">Connect a monitor</a>
-    </p>
-  } @else if (store.dataSource() === 'mock') {
-    <p class="sample mono">
-      <span>Test data from the bridge's mock monitors.</span>
-      <a routerLink="/monitors">Manage monitors</a>
-    </p>
-  }
-
-  <nav class="rooms ruled" aria-label="Rooms">
+  <div class="top-bar">
+  <nav class="rooms soft-inset" aria-label="Rooms" #tray>
+    <!-- The raised slider that glides to the selected room, like a physical toggle. -->
+    <span class="thumb" #thumb aria-hidden="true"></span>
     @for (room of store.monitors(); track room.id) {
       <a
+        #roomLink
         class="room"
         routerLink="/dashboard"
         [queryParams]="{ room: room.id }"
@@ -23,26 +15,27 @@
         [attr.aria-current]="room.id === m.id ? 'page' : null"
       >
         <span class="room-name">{{ room.name }}</span>
-        <span class="room-meta">
-          @if (room.overall; as o) {
-            <span class="state" [attr.data-tone]="o.tone">{{ o.label }}</span>
-          } @else {
-            <span class="state off">Offline</span>
-          }
-          <span class="mini" aria-hidden="true">
-            @for (r of room.readings; track r.id) {
-              <i [attr.data-tone]="r.tone"></i>
-            } @empty {
-              <i class="off"></i>
-            }
-          </span>
-        </span>
+        @if (room.overall; as o) {
+          <span class="state" [attr.data-tone]="o.tone">{{ o.label }}</span>
+        } @else {
+          <span class="state off">Offline</span>
+        }
       </a>
     }
   </nav>
 
-  <header class="head">
-    <div class="place">
+  @if (store.dataSource() !== 'live') {
+    <p class="sample soft-inset">
+      <span class="mono">
+        {{ store.dataSource() === 'mock' ? "Test data from the bridge's mock monitors" : 'Sample data · no monitors connected yet' }}
+      </span>
+      <a routerLink="/monitors">{{ store.dataSource() === 'mock' ? 'Manage monitors' : 'Connect a monitor' }}</a>
+    </p>
+  }
+  </div>
+
+  <div class="dash">
+    <header class="head tile soft">
       <p class="mono muted">
         @if (!m.online) {
           Offline
@@ -53,78 +46,77 @@
         }
       </p>
       <h1>{{ m.name }}</h1>
-    </div>
+      @if (m.online) {
+        <p class="head-sub">{{ m.readings.length }} readings · {{ m.actions.length ? m.actions.length + ' to act on' : 'nothing to act on' }}</p>
+      }
+    </header>
+
     @if (m.overall; as o) {
-      <div class="verdict" [attr.data-tone]="o.tone">
+      <section class="verdict tile soft" [attr.data-tone]="o.tone" aria-label="Overall air health">
         <p class="mono muted">Overall</p>
         <p class="verdict-word">{{ o.label }}</p>
         <p class="verdict-sub">{{ summary(o) }}</p>
-      </div>
+        <span class="verdict-bar soft-inset" aria-hidden="true">
+          @for (r of m.readings; track r.id) {
+            <i [attr.data-tone]="r.tone"></i>
+          }
+        </span>
+      </section>
     }
-  </header>
 
-  @if (m.online) {
-    <div class="layout">
-      <section class="panel ruled" aria-labelledby="readings-heading">
-        <div class="panel-head mono">
-          <h2 id="readings-heading">Readings</h2>
-          <span class="hide-sm">Healthy range</span>
-          <span class="hide-sm">Status</span>
-        </div>
+    @if (m.online) {
+      <section class="panel" aria-labelledby="readings-heading">
+        <h2 id="readings-heading" class="mono muted section-label">Readings</h2>
         <ul class="rows">
           @for (r of m.readings; track r.id) {
             <li>
-              <a class="row" [routerLink]="['/readings', r.id]" [queryParams]="{ room: m.id }" [attr.data-tone]="r.tone">
-                <span class="r-name">
-                  <span class="r-label">{{ r.def.label }}</span>
-                  <span class="r-sum">{{ r.def.summary }}</span>
+              <a class="row tile soft" [routerLink]="['/readings', r.id]" [queryParams]="{ room: m.id }" [attr.data-tone]="r.tone">
+                <span class="r-top">
+                  <span class="r-icon" aria-hidden="true"><app-icon [name]="r.def.icon" [size]="18" /></span>
+                  <app-icon class="go" name="arrow-right" [size]="16" />
                 </span>
+                <span class="r-label">{{ r.def.label }}</span>
                 <span class="r-value"><span class="num" [appFlip]="r.display"></span><span class="mono keep-case" [appFlip]="r.unit"></span></span>
-                <span class="r-scale">
-                  <app-range-scale [segments]="r.segments" [markerPct]="r.markerPct" [label]="'Healthy range ' + r.healthy" />
-                  <span class="mono muted keep-case" [appFlip]="r.healthy"></span>
-                </span>
                 <span class="state">{{ r.status }}</span>
-                <app-icon class="go" name="arrow-right" [size]="18" />
+                <span class="r-scale">
+                  <span class="track-well soft-inset">
+                    <app-range-scale [segments]="r.segments" [markerPct]="r.markerPct" [label]="'Healthy range ' + r.healthy" />
+                  </span>
+                  <span class="mono muted keep-case">Healthy <span [appFlip]="r.healthy"></span></span>
+                </span>
               </a>
-              @if (r.gases.length) {
-                <ul class="sub">
-                  @for (g of r.gases; track g.def.id) {
-                    <li [attr.data-tone]="g.tone">
-                      <span>{{ g.def.name }}</span>
-                      <span class="num"><span [appFlip]="g.display"></span><span class="mono keep-case">{{ g.unit }}</span></span>
-                      <span class="state"><span class="state-text">{{ g.status }}</span></span>
-                    </li>
-                  }
-                </ul>
-              }
             </li>
           }
         </ul>
       </section>
 
-      <aside class="todo ruled" aria-labelledby="todo-heading">
-        <h2 id="todo-heading">What to do</h2>
+      <aside class="todo-area" aria-labelledby="todo-heading">
+        <h2 id="todo-heading" class="mono muted section-label">What to do</h2>
+        <div class="todo tile soft">
         <ul>
           @for (action of m.actions; track action.id) {
             <li [attr.data-tone]="action.tone">
-              <p class="when mono">
-                <span class="state">{{ action.tone === 'alert' ? 'Now' : 'Today' }}</span>
-                <a [routerLink]="['/readings', action.id]" [queryParams]="{ room: m.id }">{{ action.def.label }}</a>
-              </p>
-              <p>{{ action.advice }}</p>
+              <a class="todo-row" [routerLink]="['/readings', action.id]" [queryParams]="{ room: m.id }">
+                <span class="when">
+                  <span class="state">{{ action.tone === 'alert' ? 'Now' : 'Today' }}</span>
+                  <span class="todo-name">{{ action.def.label }}</span>
+                  <app-icon class="go" name="arrow-right" [size]="16" />
+                </span>
+                <span class="todo-advice">{{ action.advice }}</span>
+              </a>
             </li>
           } @empty {
-            <li><p>Nothing to do. Every reading is in range.</p></li>
+            <li class="todo-empty"><p>Nothing to do. Every reading is in range.</p></li>
           }
         </ul>
+        </div>
       </aside>
-    </div>
-  } @else {
-    <section class="offline ruled">
-      <h2>This monitor hasn't checked in.</h2>
-      <p>Make sure it's plugged in and powered on. Readings will appear here as soon as it reconnects.</p>
-      <a class="btn" routerLink="/monitors">Manage monitors</a>
-    </section>
-  }
+    } @else {
+      <section class="offline tile soft">
+        <h2>This monitor hasn't checked in.</h2>
+        <p>Make sure it's plugged in and powered on. Readings will appear here as soon as it reconnects.</p>
+        <a class="btn" routerLink="/monitors">Manage monitors</a>
+      </section>
+    }
+  </div>
 </div>

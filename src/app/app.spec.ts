@@ -38,7 +38,7 @@ describe('App', () => {
     expect(el.querySelectorAll('.room').length).toBe(4);
     expect(el.querySelector('h1')?.textContent).toContain('Living room');
     expect(el.querySelectorAll('.row').length).toBe(7);
-    expect(el.querySelectorAll('.sub li').length).toBe(3);
+    expect(el.querySelector('.row[href*="gases"]')).toBeTruthy();
     expect(el.querySelectorAll('.todo li').length).toBe(3);
   });
 

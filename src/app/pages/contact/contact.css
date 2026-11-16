@@ -27,11 +27,10 @@ h1 {
   color: var(--muted);
 }
 .channel {
-  margin: 16px 0 0;
-  padding-top: 16px;
-}
-.channel::before {
-  background: var(--line-strong);
+  align-self: flex-start;
+  margin: 12px 0 0;
+  padding: 16px 22px;
+  border-radius: 20px;
 }
 .channel dt {
   color: var(--muted);
@@ -45,8 +44,8 @@ form {
   flex: 1 1 440px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding-top: 20px;
+  gap: 20px;
+  padding: clamp(22px, 3vw, 32px);
 }
 h2 {
   font-size: 24px;
@@ -74,9 +73,9 @@ textarea {
   font: inherit;
   font-size: 16px;
   padding: 12px 14px;
-  border-radius: 6px;
+  border-radius: 12px;
   border: 1px solid var(--line-strong);
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
   color: var(--ink);
 }
 textarea {

@@ -1,104 +1,130 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Reveal } from '../motion/reveal';
+import { IconName } from '../core/models';
+import { Icon } from '../shared/icon';
 import { Vane } from '../shared/vane';
 
 @Component({
   selector: 'app-about',
-  imports: [RouterLink, Reveal, Vane],
+  imports: [RouterLink, Icon, Reveal, Vane],
   template: `
     <div class="container page">
-      <div class="top">
-        <div class="copy">
+      <section class="intro" aria-labelledby="about-heading">
+        <div class="head">
           <p class="mono muted" appReveal>About</p>
-          <h1 appReveal="lines">Named after the instrument that reads the air.</h1>
+          <h1 id="about-heading" appReveal="lines">Named after the instrument that reads the air.</h1>
+        </div>
+        <div class="body">
+          <p class="lede" appReveal [revealDelay]="0.12">
+            Vane pairs with small indoor monitors, one per room, that measure particles, carbon dioxide, temperature,
+            humidity and more. Instead of raw numbers, it tells you whether each reading is healthy and what to do when
+            it isn't.
+          </p>
+          <p class="muted credit" appReveal [revealDelay]="0.18">Built by GB Labs.</p>
+          <div class="actions" appReveal [revealDelay]="0.24">
+            <a class="btn" routerLink="/dashboard">Open the dashboard</a>
+            <a class="text-link" routerLink="/contact">Contact us</a>
+          </div>
         </div>
         <app-vane class="vane" />
-      </div>
+      </section>
 
-      <dl class="definition ruled" appReveal="rule">
-        <dt appReveal>vane <span class="mono muted">/veɪn/ · noun</span></dt>
-        <dd appReveal [revealDelay]="0.1">
-          A blade on a rooftop that turns to show which way the wind is blowing. You glance at it, and you know.
-        </dd>
+      <dl class="definition glass" appReveal>
+        <dt>vane <span class="mono muted">/veɪn/ · noun</span></dt>
+        <dd>A blade on a rooftop that turns to show which way the wind is blowing. You glance at it, and you know.</dd>
       </dl>
-
-      <div class="story">
-        <p appReveal>
-          Vane pairs with small indoor monitors, one per room, that measure particles, carbon dioxide, temperature,
-          humidity and more. Instead of raw numbers, it tells you whether each reading is healthy and what to do when it
-          isn't.
-        </p>
-        <p class="muted" appReveal [revealDelay]="0.1">Built by GB Labs.</p>
-      </div>
 
       <section class="principles" aria-labelledby="principles-heading">
         <h2 id="principles-heading" class="mono muted" appReveal>What guides it</h2>
-        <ul class="ruled" appReveal="rule">
-          <li appReveal>
-            <h3>Plain words over numbers</h3>
-            <p>Every value comes with what it means and what to do about it.</p>
-          </li>
-          <li appReveal [revealDelay]="0.08">
-            <h3>One scale everywhere</h3>
-            <p>Clear, haze and ember mean the same thing for every reading in every room.</p>
-          </li>
-          <li appReveal [revealDelay]="0.16">
-            <h3>The urgent thing first</h3>
-            <p>Advice is sorted by how soon it matters, so you never have to hunt for it.</p>
-          </li>
+        <ul>
+          @for (p of principles; track p.title; let i = $index) {
+            <li class="glass" appReveal [revealDelay]="i * 0.08">
+              <span class="p-icon" aria-hidden="true"><app-icon [name]="p.icon" [size]="20" /></span>
+              <h3>{{ p.title }}</h3>
+              <p>{{ p.text }}</p>
+            </li>
+          }
         </ul>
       </section>
-
-      <a class="btn" routerLink="/dashboard" appReveal>Open the dashboard</a>
     </div>
   `,
   styles: `
     .page {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: clamp(40px, 7vh, 72px);
-      padding-top: clamp(40px, 7vh, 72px);
+      gap: clamp(32px, 5.5vh, 56px);
+      padding-top: clamp(32px, 6vh, 64px);
     }
     .muted {
       color: var(--muted);
     }
-    .top {
+
+    /* Intro: headline, what Vane does and the next step, all on one left edge;
+       the vane stands beside it. */
+    .intro {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'head vane'
+        'body vane';
       align-items: center;
-      gap: 32px 64px;
-      width: 100%;
+      gap: 20px clamp(32px, 6vw, 96px);
     }
-    .copy {
+    .head {
+      grid-area: head;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
     h1 {
-      max-width: 14ch;
-      font-size: clamp(44px, min(7vw, 11vh), 104px);
+      max-width: 15ch;
+      font-size: clamp(40px, min(6vw, 9vh), 88px);
       font-stretch: 88%;
-      line-height: 0.92;
+      line-height: 0.94;
       letter-spacing: -0.05em;
     }
-    .vane {
-      width: clamp(120px, min(15vw, 26vh), 230px);
-      margin-right: clamp(0px, 4vw, 64px);
+    .body {
+      grid-area: body;
+      align-self: start;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 60ch;
     }
+    .lede {
+      font-size: clamp(17px, 1.5vw, 20px);
+      line-height: 1.55;
+      color: var(--ink-2);
+    }
+    .credit {
+      font-size: 15px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 28px;
+      margin-top: 8px;
+    }
+    .vane {
+      grid-area: vane;
+      width: clamp(120px, min(15vw, 26vh), 220px);
+      margin-right: clamp(0px, 3vw, 48px);
+    }
+
+    /* The glass feature: the definition as a frosted card. */
     .definition {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      align-items: center;
       gap: 12px 48px;
-      width: 100%;
       margin: 0;
-      padding-top: 24px;
+      padding: clamp(22px, 3vw, 36px) clamp(24px, 3.4vw, 44px);
     }
     .definition dt {
-      font-size: clamp(30px, 3.4vw, 44px);
+      font-size: clamp(30px, 3.2vw, 42px);
       font-weight: 600;
-      font-style: normal;
       letter-spacing: -0.03em;
     }
     .definition dt .mono {
@@ -107,90 +133,101 @@ import { Vane } from '../shared/vane';
     }
     .definition dd {
       margin: 0;
-      font-size: clamp(20px, 2vw, 28px);
+      font-size: clamp(19px, 1.9vw, 26px);
       line-height: 1.3;
       letter-spacing: -0.015em;
     }
-    .story {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      max-width: 58ch;
-      margin-left: auto;
-      font-size: clamp(17px, 1.4vw, 19px);
-      color: var(--ink-2);
-    }
-    .principles {
-      width: 100%;
-    }
+
+    /* Principles: three matching cards that scan as a set. */
     .principles h2 {
-      margin-bottom: 12px;
+      margin: 0 0 14px 4px;
     }
     .principles ul {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 24px 40px;
+      gap: 20px;
       margin: 0;
-      padding: 24px 0 0;
+      padding: 0;
       list-style: none;
     }
+    .principles li {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 22px 24px;
+      border-radius: 22px;
+    }
+    .p-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      margin-bottom: 6px;
+      border-radius: 50%;
+      background: var(--paper);
+      box-shadow: var(--raise-sm);
+      color: var(--ink-2);
+    }
     .principles h3 {
-      font-size: clamp(20px, 1.8vw, 24px);
+      font-size: clamp(19px, 1.6vw, 22px);
       letter-spacing: -0.02em;
     }
     .principles p {
-      margin-top: 8px;
       color: var(--ink-2);
+      line-height: 1.5;
     }
-    @media (max-width: 760px) {
-      .definition,
+
+    @media (max-width: 860px) {
       .principles ul {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+      }
+      .definition {
         grid-template-columns: minmax(0, 1fr);
       }
     }
-    /* Phones: vane tucks in right beside the headline, and everything steps down a size. */
-    @media (max-width: 480px) {
+
+    /* Phones: the vane tucks in beside the headline; the text runs full width below. */
+    @media (max-width: 600px) {
       .page {
-        gap: 36px;
-        padding-top: 32px;
+        gap: 32px;
+        padding-top: 28px;
       }
-      .top {
-        grid-template-columns: minmax(0, 1fr) 92px;
+      .intro {
+        grid-template-columns: minmax(0, 1fr) 84px;
+        grid-template-areas:
+          'head vane'
+          'body body';
         align-items: end;
-        gap: 12px;
+        gap: 18px 12px;
       }
       h1 {
         font-size: 36px;
       }
       .vane {
-        width: 92px;
+        width: 84px;
         margin: 0;
       }
-      .definition {
-        padding-top: 18px;
+      .lede {
+        font-size: 16px;
       }
       .definition dt {
         font-size: 28px;
       }
       .definition dd {
-        font-size: 19px;
+        font-size: 18px;
       }
-      .story {
-        gap: 12px;
-        font-size: 16px;
-      }
-      .principles ul {
-        gap: 20px;
-        padding-top: 18px;
-      }
-      .principles h3 {
-        font-size: 19px;
-      }
-      .principles p {
-        font-size: 15px;
+      .principles li {
+        padding: 18px 20px;
       }
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class About {}
+export class About {
+  protected readonly principles: { icon: IconName; title: string; text: string }[] = [
+    { icon: 'bulb', title: 'Plain words over numbers', text: 'Every value comes with what it means and what to do about it.' },
+    { icon: 'pressure', title: 'One scale everywhere', text: 'Clear, haze and ember mean the same thing for every reading in every room.' },
+    { icon: 'check', title: 'The urgent thing first', text: 'Advice is sorted by how soon it matters, so you never have to hunt for it.' },
+  ];
+}

@@ -45,6 +45,18 @@
 
   --font-sans: 'Archivo', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Soft UI: tiles share the page color and are lifted (or pressed) by a light
+     and a dark shadow. The faint edge keeps tiles visible even where shadows
+     are hard to see, which plain neumorphism gets wrong for low-vision users. */
+  --soft-hi: #ffffff;
+  --soft-lo: rgb(15 21 18 / 0.14);
+  --soft-edge: rgb(255 255 255 / 0.7);
+  --raise: 7px 7px 18px var(--soft-lo), -7px -7px 18px var(--soft-hi);
+  --raise-sm: 3px 3px 8px var(--soft-lo), -3px -3px 8px var(--soft-hi);
+  --press: inset 3px 3px 7px var(--soft-lo), inset -3px -3px 7px var(--soft-hi);
+  /* A shallower well, for small tracks inside tiles. */
+  --press-soft: inset 1.5px 1.5px 3px var(--soft-lo), inset -1.5px -1.5px 3px var(--soft-hi);
 }
 
 /* Sections that flip to the opposite theme (the dark statement band on the landing page). */
@@ -87,6 +99,10 @@
   --invert-fg: #0e1311;
   --invert-muted: #4f5a54;
   color-scheme: dark;
+
+  --soft-hi: rgb(255 255 255 / 0.05);
+  --soft-lo: rgb(0 0 0 / 0.6);
+  --soft-edge: rgb(255 255 255 / 0.06);
 }
 
 /* Any element with data-tone="good|watch|alert" gets matching --tone-* colors. */
@@ -310,6 +326,59 @@ a {
   top: 50%;
   height: 1px;
   background: var(--flip-hinge, var(--paper));
+}
+
+/* Soft UI building blocks. */
+.soft {
+  background: var(--paper);
+  border: 1px solid var(--soft-edge);
+  border-radius: 24px;
+  box-shadow: var(--raise);
+}
+.soft-inset {
+  background: var(--paper);
+  border-radius: 999px;
+  box-shadow: var(--press);
+}
+
+/* Frosted glass, matching the hero's 3D panels: a translucent surface that blurs
+   what's behind it, a bright edge where light catches it. */
+.glass {
+  background: color-mix(in srgb, var(--surface) 52%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.35);
+  backdrop-filter: blur(20px) saturate(1.35);
+  border: 1px solid rgb(255 255 255 / 0.75);
+  border-radius: 28px;
+  box-shadow:
+    0 18px 50px -24px rgb(15 21 18 / 0.28),
+    inset 0 1px 0 rgb(255 255 255 / 0.85);
+}
+:root[data-theme='dark'] .glass {
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  border-color: rgb(255 255 255 / 0.09);
+  box-shadow:
+    0 18px 50px -24px rgb(0 0 0 / 0.7),
+    inset 0 1px 0 rgb(255 255 255 / 0.07);
+}
+
+/* Soft light behind a page's content (the brand's sky, sage and ochre, blurred),
+   so glass panels on top have something to show through. */
+.ambient {
+  position: relative;
+  isolation: isolate;
+}
+.ambient::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -4% 0 0;
+  background:
+    radial-gradient(34% 38% at 22% 30%, color-mix(in srgb, var(--good-fill) 45%, transparent), transparent 70%),
+    radial-gradient(30% 36% at 78% 62%, color-mix(in srgb, var(--comfort-fill) 50%, transparent), transparent 70%),
+    radial-gradient(22% 26% at 70% 14%, color-mix(in srgb, var(--watch-fill) 30%, transparent), transparent 70%);
+  filter: blur(40px);
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 /* A top rule that can draw in from the left (animate --rule from 0 to 1). */

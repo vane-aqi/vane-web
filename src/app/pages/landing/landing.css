@@ -34,7 +34,7 @@
   position: relative;
   flex: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   align-items: center;
   gap: 24px clamp(32px, 5vw, 96px);
   padding-top: clamp(20px, 4.5vh, 64px);
@@ -79,9 +79,11 @@ html.motion .readout-item {
   gap: 12px 28px;
 }
 
-.hero-vane {
-  justify-self: center;
-  width: clamp(150px, min(19vw, 32vh), 290px);
+/* The 3D scene: as tall as the hero allows, bleeding a little past the column. */
+.hero-scene {
+  align-self: stretch;
+  min-height: min(52vh, 520px);
+  margin-inline: -4% -6%;
 }
 
 .readout {
@@ -419,8 +421,10 @@ h2 {
   .hero-inner {
     grid-template-columns: minmax(0, 1fr);
   }
-  .hero-vane {
-    display: none;
+  /* The 3D scene moves under the headline and buttons. */
+  .hero-scene {
+    min-height: clamp(300px, 64vw, 460px);
+    margin-inline: -4%;
   }
   .headline {
     font-size: clamp(44px, min(10vw, 9vh), 104px);

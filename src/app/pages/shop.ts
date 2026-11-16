@@ -8,8 +8,8 @@ import { DeviceRender } from '../shared/device-render';
   selector: 'app-shop',
   imports: [ReactiveFormsModule, DeviceRender, Reveal],
   template: `
-    <div class="container page">
-      <div class="art" appReveal="fade">
+    <div class="container page ambient">
+      <div class="art glass" appReveal="fade">
         <app-device-render class="device" />
       </div>
 
@@ -21,7 +21,7 @@ import { DeviceRender } from '../shared/device-render';
           to your Vane dashboard.
         </p>
 
-        <div class="buy ruled" appReveal="rule">
+        <div class="buy glass" appReveal [revealDelay]="0.08">
           <div class="price-row" appReveal [revealDelay]="0.1">
             <span class="price">$150</span>
             <span class="state off">Out of stock</span>
@@ -73,20 +73,33 @@ import { DeviceRender } from '../shared/device-render';
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
       align-items: start;
-      gap: 40px clamp(40px, 6vw, 96px);
-      padding-top: clamp(32px, 6vh, 64px);
+      gap: 32px clamp(36px, 5vw, 80px);
+      padding-top: clamp(24px, 4vh, 48px);
     }
     .muted {
       color: var(--muted);
     }
     /* The product shot stand-in: a drawn monitor on a quiet surface. */
     .art {
+      position: relative;
       display: grid;
       place-items: center;
-      aspect-ratio: 4 / 5;
-      border-radius: 6px;
-      background: var(--surface);
-      border: 1px solid var(--line);
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+    }
+    /* A pool of light behind the device, like a studio product shot. */
+    .art::before {
+      content: '';
+      position: absolute;
+      inset: 18%;
+      background:
+        radial-gradient(closest-side, color-mix(in srgb, var(--good-fill) 55%, transparent), transparent),
+        radial-gradient(60% 50% at 70% 75%, color-mix(in srgb, var(--comfort-fill) 55%, transparent), transparent);
+      filter: blur(30px);
+      pointer-events: none;
+    }
+    .art > * {
+      position: relative;
     }
     .device {
       width: min(64%, 340px);
@@ -94,10 +107,10 @@ import { DeviceRender } from '../shared/device-render';
     .info {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 12px;
     }
     h1 {
-      font-size: clamp(44px, min(6.4vw, 10vh), 96px);
+      font-size: clamp(40px, min(5.4vw, 8.5vh), 84px);
       font-stretch: 88%;
       line-height: 0.92;
       letter-spacing: -0.05em;
@@ -111,9 +124,9 @@ import { DeviceRender } from '../shared/device-render';
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 18px;
-      margin-top: 12px;
-      padding-top: 20px;
+      gap: 14px;
+      margin-top: 4px;
+      padding: 20px 22px;
     }
     .price-row {
       display: flex;
@@ -147,8 +160,8 @@ import { DeviceRender } from '../shared/device-render';
       min-height: 44px;
       padding: 0 14px;
       border: 1px solid var(--line-strong);
-      border-radius: 6px;
-      background: var(--surface);
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
       color: var(--ink);
       font: inherit;
       font-size: 16px;
@@ -179,13 +192,13 @@ import { DeviceRender } from '../shared/device-render';
     .facts {
       display: flex;
       flex-direction: column;
-      margin: 20px 0 0;
+      margin: 12px 0 0;
     }
     .facts div {
       display: grid;
       grid-template-columns: 120px minmax(0, 1fr);
       gap: 4px 24px;
-      padding-block: 14px;
+      padding-block: 11px;
       border-bottom: 1px solid var(--line);
     }
     .facts dt {

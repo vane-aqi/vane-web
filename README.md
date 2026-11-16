@@ -57,6 +57,9 @@ src/
       scroll-words.ts        Words that brighten on scroll (adapted from React Bits ScrollReveal)
     layout/                  Header and footer
     shared/                  Reusable UI: icon, range bar, arc gauge, animated vane, media-query signal
+      hero-scene/            The landing hero's three.js scene (glass panels, device, bubbles).
+                             three.js loads lazily, only on wide screens with WebGL; otherwise
+                             the line-drawn vane shows instead
     pages/                   One folder or file per route
 ```
 

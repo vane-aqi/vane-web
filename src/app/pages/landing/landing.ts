@@ -23,7 +23,7 @@ import { ScrollWords } from '../../motion/scroll-words';
 import { SmoothScroll } from '../../motion/smooth-scroll';
 import { Icon } from '../../shared/icon';
 import { RangeScale } from '../../shared/range-scale';
-import { Vane } from '../../shared/vane';
+import { HeroScene } from '../../shared/hero-scene/hero-scene';
 
 /** Gentle curves behind the hero, drawn across a 1440×800 box. Suggests air moving through a room. */
 const AIR_PATHS = Array.from({ length: 9 }, (_, i) => {
@@ -34,7 +34,7 @@ const AIR_PATHS = Array.from({ length: 9 }, (_, i) => {
 
 @Component({
   selector: 'app-landing',
-  imports: [RouterLink, CountUp, Flip, Icon, RangeScale, Reveal, ScrollWords, Vane],
+  imports: [RouterLink, CountUp, Flip, HeroScene, Icon, RangeScale, Reveal, ScrollWords],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,11 +57,6 @@ export class Landing {
   protected readonly airPaths = AIR_PATHS;
   /** Flips true once the hero has animated in; starts the counters and the vane. */
   protected readonly heroReady = signal(false);
-
-  protected readonly vaneCaption = computed(() => {
-    const m = this.home();
-    return `${m.name} · ${m.overall?.label ?? 'Offline'}`;
-  });
 
   /** The most urgent advice, written out as one plain statement. */
   protected readonly statement = computed(() => {
