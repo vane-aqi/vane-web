@@ -20,6 +20,9 @@ import { Icon } from '../shared/icon';
         </p>
       </header>
 
+      <p class="count mono muted" appReveal [revealDelay]="0.1">
+        {{ store.monitors().length }} {{ store.monitors().length === 1 ? 'monitor' : 'monitors' }}
+      </p>
       <ul class="list">
         @for (m of store.monitors(); track m.id; let i = $index) {
           <li class="item soft" appReveal [revealDelay]="0.1 + i * 0.07">
@@ -130,6 +133,13 @@ import { Icon } from '../shared/icon';
       max-width: 40ch;
       font-size: clamp(16px, 1.4vw, 19px);
       color: var(--ink-2);
+    }
+
+    .count {
+      margin: 0 0 calc(-1 * clamp(8px, 1.6vh, 24px)) 4px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     /* Monitor tiles */
@@ -345,6 +355,61 @@ import { Icon } from '../shared/icon';
       }
       to {
         transform: translateX(560%);
+      }
+    }
+    /* Phones: compact rows, so every monitor (and the next section) shows on the
+       first screen. Icon, name and status share one line; bar and Open below. */
+    @media (max-width: 640px) {
+      .list {
+        gap: 12px;
+      }
+      .item {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-areas:
+          'icon name pill'
+          'bars bars act';
+        align-items: center;
+        gap: 12px 12px;
+        padding: 14px 16px;
+        border-radius: 20px;
+      }
+      .item-top {
+        display: contents;
+      }
+      .device-icon {
+        grid-area: icon;
+        width: 34px;
+        height: 34px;
+      }
+      .pill {
+        grid-area: pill;
+        justify-self: end;
+        padding: 5px 10px;
+      }
+      .name {
+        grid-area: name;
+        gap: 2px;
+      }
+      .name h2 {
+        font-size: 19px;
+      }
+      .name p {
+        font-size: 11px;
+      }
+      .bars {
+        grid-area: bars;
+      }
+      .bars i {
+        height: 6px;
+      }
+      .actions {
+        grid-area: act;
+        gap: 12px;
+      }
+      .open {
+        min-height: 36px;
+        padding: 0 14px;
       }
     }
     @media (max-width: 760px) {

@@ -10,6 +10,7 @@ import {
   effect,
   inject,
   input,
+  signal,
   untracked,
   viewChild,
   viewChildren,
@@ -40,6 +41,39 @@ export class Overview {
   private readonly thumb = viewChild<ElementRef<HTMLElement>>('thumb');
   private readonly roomLinks = viewChildren<ElementRef<HTMLElement>>('roomLink');
   private thumbPlaced = false;
+
+  /** Whether the room tray has rooms hidden off its left or right edge. */
+  protected readonly moreStart = signal(false);
+  protected readonly moreEnd = signal(false);
+
+  protected checkTray(): void {
+    const tray = this.tray()?.nativeElement;
+    if (!tray) return;
+    const max = tray.scrollWidth - tray.clientWidth;
+    this.moreStart.set(tray.scrollLeft > 4);
+    this.moreEnd.set(tray.scrollLeft < max - 4);
+  }
+
+  /** Step the tray most of its width in one direction. */
+  protected scrollTray(dir: 1 | -1): void {
+    const tray = this.tray()?.nativeElement;
+    if (!tray) return;
+    tray.scrollBy({ left: dir * tray.clientWidth * 0.7, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+  }
+
+  /**
+   * The first time a scrolling tray appears, slide it a little and back, so it's
+   * obvious the rooms continue past the edge.
+   */
+  private nudgeTray(): void {
+    const tray = this.tray()?.nativeElement;
+    if (!tray || prefersReducedMotion() || tray.scrollLeft > 4 || tray.scrollWidth <= tray.clientWidth) return;
+    const pos = { x: 0 };
+    gsap
+      .timeline({ delay: 0.9, onUpdate: () => (tray.scrollLeft = pos.x) })
+      .to(pos, { x: Math.min(56, tray.scrollWidth - tray.clientWidth), duration: 0.5, ease: 'power2.inOut' })
+      .to(pos, { x: 0, duration: 0.6, ease: 'power2.inOut' }, '+=0.15');
+  }
 
   protected summary(o: OverallHealth): string {
     const { alert, watch } = o.counts;
@@ -79,9 +113,15 @@ export class Overview {
     });
 
     // Widths change when fonts load or the window resizes; snap the slider back into place.
-    const snap = () => this.moveThumb(false);
+    const snap = () => {
+      this.moveThumb(false);
+      this.checkTray();
+    };
     afterNextRender(() => {
-      document.fonts?.ready.then(snap);
+      document.fonts?.ready.then(() => {
+        snap();
+        this.nudgeTray();
+      });
       window.addEventListener('resize', snap);
     });
 

@@ -2,7 +2,8 @@
 
 <div class="container page">
   <div class="top-bar">
-  <nav class="rooms soft-inset" aria-label="Rooms" #tray>
+  <div class="rooms-wrap" [class.more-start]="moreStart()" [class.more-end]="moreEnd()">
+  <nav class="rooms soft-inset" aria-label="Rooms" #tray (scroll)="checkTray()">
     <!-- The raised slider that glides to the selected room, like a physical toggle. -->
     <span class="thumb" #thumb aria-hidden="true"></span>
     @for (room of store.monitors(); track room.id) {
@@ -23,6 +24,19 @@
       </a>
     }
   </nav>
+  <!-- On narrow screens the tray scrolls; these arrows show (and step to) the rooms out of view. -->
+  <button type="button" class="tray-arrow start" tabindex="-1" aria-hidden="true" (click)="scrollTray(-1)">
+    <app-icon name="arrow-left" [size]="16" />
+  </button>
+  <button type="button" class="tray-arrow end" tabindex="-1" aria-hidden="true" (click)="scrollTray(1)">
+    <app-icon name="arrow-right" [size]="16" />
+  </button>
+  </div>
+  @if (moreStart() || moreEnd()) {
+    <p class="room-count mono muted">
+      {{ store.monitors().length }} rooms · swipe to see all
+    </p>
+  }
 
   @if (store.dataSource() !== 'live') {
     <p class="sample soft-inset">

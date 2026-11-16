@@ -41,6 +41,78 @@
 
 /* Room switcher: a recessed tray with one raised slider that glides to the
    selected room (positioned by overview.ts). */
+.rooms-wrap {
+  position: relative;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* When rooms are hidden past an edge, that edge fades and a raised arrow button
+   sits on it. overview.ts sets more-start / more-end from the scroll position. */
+.rooms-wrap.more-end .rooms {
+  mask-image: linear-gradient(to right, #000 calc(100% - 64px), transparent calc(100% - 8px));
+}
+.rooms-wrap.more-start .rooms {
+  mask-image: linear-gradient(to left, #000 calc(100% - 64px), transparent calc(100% - 8px));
+}
+.rooms-wrap.more-start.more-end .rooms {
+  mask-image: linear-gradient(to right, transparent 8px, #000 64px, #000 calc(100% - 64px), transparent calc(100% - 8px));
+}
+
+.tray-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: var(--raise-sm);
+  color: var(--ink);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(0.7);
+  transition:
+    opacity 0.25s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tray-arrow.start {
+  left: 2px;
+}
+.tray-arrow.end {
+  right: 2px;
+}
+.more-start .tray-arrow.start,
+.more-end .tray-arrow.end {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%);
+}
+.tray-arrow:active {
+  box-shadow: var(--press);
+}
+/* The forward arrow drifts gently to draw the eye. */
+.more-end .tray-arrow.end app-icon {
+  animation: drift 1.6s ease-in-out infinite;
+}
+@keyframes drift {
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+.room-count {
+  margin: -4px 0 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .rooms {
   position: relative;
   display: flex;
@@ -430,10 +502,8 @@ h1 {
   .sample {
     border-radius: 18px;
   }
-  /* Rooms scroll sideways; fade the edge so it's clear there are more. */
-  .rooms {
-    mask-image: linear-gradient(to right, #000 82%, transparent);
-    padding-right: 32px;
+  .rooms-wrap {
+    align-self: stretch;
   }
   .dash {
     grid-template-columns: minmax(0, 1fr);
@@ -451,18 +521,30 @@ h1 {
   .tile {
     padding: 16px;
   }
+  /* Square tiles: the bar stays, its caption moves to the reading's own page. */
   .row {
+    aspect-ratio: 1 / 1;
+    height: auto;
     padding: 14px;
   }
   .r-icon {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
   }
   .r-label {
     font-size: 13px;
   }
   .r-value .num {
     font-size: 24px;
+  }
+  .r-scale > .mono {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .more-end .tray-arrow.end app-icon {
+    animation: none;
   }
 }
 

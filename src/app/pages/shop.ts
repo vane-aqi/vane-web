@@ -215,10 +215,10 @@ import { DeviceRender } from '../shared/device-render';
       }
       .art {
         aspect-ratio: auto;
-        padding: 36px 0 24px;
+        padding: 24px 0 18px;
       }
       .device {
-        width: min(52%, 220px);
+        width: min(38%, 160px);
       }
     }
     @media (max-width: 480px) {
