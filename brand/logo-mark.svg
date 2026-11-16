@@ -1,0 +1,7 @@
+<!-- Vane mark: a V whose right arm is a wind-vane arrow, with a pivot dot.
+     Uses currentColor for the V, so it follows the text color (and dark mode). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <path d="M5.5 7.5 13 25l11-17.3" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M27.2 2.6 27.04 9.59 20.96 5.75Z" fill="#2f7a55"/>
+  <circle cx="13" cy="25" r="2.6" fill="#2f7a55"/>
+</svg>

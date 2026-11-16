@@ -1,0 +1,47 @@
+<!-- GitHub org avatar (rendered to github-avatar.png). Full bleed, because GitHub
+     crops avatars to a circle; the mark stays well inside that circle. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e4eef3"/>
+      <stop offset="1" stop-color="#e3eee5"/>
+    </linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="38"/>
+    </filter>
+    <radialGradient id="bubble" cx=".5" cy=".5" r=".5">
+      <stop offset=".72" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".93" stop-color="#bfe0ee" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".95"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".35"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- soft light, in the brand's sky, sage and gold -->
+  <g filter="url(#soft)" opacity=".85">
+    <circle cx="170" cy="190" r="120" fill="#8cc3e6" opacity=".55"/>
+    <circle cx="340" cy="330" r="130" fill="#9cc5a8" opacity=".6"/>
+    <circle cx="350" cy="140" r="70" fill="#e2c27e" opacity=".35"/>
+  </g>
+
+  <!-- the glass tile the mark sits on -->
+  <rect x="116" y="116" width="280" height="280" rx="72" fill="url(#glass)"/>
+  <rect x="117.5" y="117.5" width="277" height="277" rx="70.5" fill="none" stroke="#fff" stroke-width="3"/>
+
+  <!-- bubbles -->
+  <circle cx="392" cy="122" r="34" fill="url(#bubble)"/>
+  <circle cx="380" cy="110" r="5" fill="#fff" opacity=".9"/>
+  <circle cx="120" cy="388" r="22" fill="url(#bubble)"/>
+  <circle cx="112" cy="380" r="3.5" fill="#fff" opacity=".9"/>
+
+  <!-- the mark -->
+  <g transform="translate(139 141) scale(7.6)">
+    <path d="M5.5 7.5 13 25l11-17.3" fill="none" stroke="#0f1512" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M27.2 2.6 27.04 9.59 20.96 5.75Z" fill="#2f7a55"/>
+    <circle cx="13" cy="25" r="2.6" fill="#2f7a55"/>
+  </g>
+</svg>

@@ -8,7 +8,7 @@ import { DeviceRender } from '../shared/device-render';
   selector: 'app-shop',
   imports: [ReactiveFormsModule, DeviceRender, Reveal],
   template: `
-    <div class="container page ambient">
+    <div class="container page">
       <div class="art glass" appReveal="fade">
         <app-device-render class="device" />
       </div>

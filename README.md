@@ -18,6 +18,17 @@ The opening animation plays once per browser tab. Open a new tab (or clear sessi
 
 The moon/sun button in the header switches between light and dark themes. The first visit follows the system setting; after that the choice is remembered.
 
+## Brand
+
+The Vane mark is a V whose right arm is a wind-vane arrow, with a pivot dot.
+
+| File | Use |
+| --- | --- |
+| `brand/logo-mark.svg` | The mark on its own (uses `currentColor`, so it takes the surrounding text color) |
+| `public/favicon.svg` | Browser tab icon: the mark on a glass tile |
+| `public/apple-touch-icon.png` | iPhone / iPad home screen icon (180 px) |
+| `brand/github-avatar.png` | GitHub organization picture (1024 px), made from `brand/github-avatar.svg` |
+
 ## Pages
 
 | URL | What it is |

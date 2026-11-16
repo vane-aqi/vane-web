@@ -1,1 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0f1512"/><text x="16" y="23" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#eef0ea">v</text></svg>
+<!-- Tab icon: a small version of the GitHub avatar. Soft sky, sage and gold light,
+     a frosted glass tile, the Vane mark, and a bubble that shows at larger sizes. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="tile">
+      <rect width="64" height="64" rx="16"/>
+    </clipPath>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e4eef3"/>
+      <stop offset="1" stop-color="#e3eee5"/>
+    </linearGradient>
+    <radialGradient id="sky" cx=".28" cy=".32" r=".55">
+      <stop offset="0" stop-color="#8cc3e6" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#8cc3e6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sage" cx=".72" cy=".74" r=".58">
+      <stop offset="0" stop-color="#9cc5a8" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#9cc5a8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gold" cx=".74" cy=".2" r=".32">
+      <stop offset="0" stop-color="#e2c27e" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#e2c27e" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".4"/>
+    </linearGradient>
+    <radialGradient id="bubble" cx=".5" cy=".5" r=".5">
+      <stop offset=".7" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".92" stop-color="#bfe0ee" stop-opacity=".6"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".95"/>
+    </radialGradient>
+  </defs>
+
+  <g clip-path="url(#tile)">
+    <rect width="64" height="64" fill="url(#base)"/>
+    <rect width="64" height="64" fill="url(#sky)"/>
+    <rect width="64" height="64" fill="url(#sage)"/>
+    <rect width="64" height="64" fill="url(#gold)"/>
+    <!-- frosted glass tile -->
+    <rect x="7" y="7" width="50" height="50" rx="14" fill="url(#glass)"/>
+    <rect x="7.75" y="7.75" width="48.5" height="48.5" rx="13.25" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <!-- bubble, top right -->
+    <circle cx="55" cy="9" r="6.5" fill="url(#bubble)"/>
+    <circle cx="53" cy="7" r="1.2" fill="#fff"/>
+  </g>
+
+  <!-- the mark -->
+  <g transform="translate(14.5 14.8) scale(1.12)">
+    <path d="M5.5 7.5 13 25l11-17.3" fill="none" stroke="#0f1512" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M27.6 2 27.2 10.4 20.4 5.9Z" fill="#2f7a55"/>
+    <circle cx="13" cy="25" r="3" fill="#2f7a55"/>
+  </g>
+</svg>
