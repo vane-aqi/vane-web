@@ -40,6 +40,11 @@ export const routes: Routes = [
     title: 'Contact · Vane',
   },
   {
+    path: 'brand',
+    loadComponent: () => import('./pages/brand').then((m) => m.Brand),
+    title: 'Brand · Vane',
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/not-found').then((m) => m.NotFound),
     title: 'Not found · Vane',

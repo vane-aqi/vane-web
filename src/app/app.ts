@@ -78,6 +78,13 @@ import { SmoothScroll } from './motion/smooth-scroll';
         radial-gradient(36% 38% at 24% 40%, var(--sage), transparent 70%),
         radial-gradient(26% 34% at 82% 26%, var(--sky), transparent 70%);
     }
+    /* Brand: all three lights spread wide, like a palette laid out. */
+    .page-glow[data-page='brand'] {
+      background:
+        radial-gradient(28% 34% at 82% 18%, var(--sky), transparent 70%),
+        radial-gradient(26% 32% at 12% 60%, var(--sage), transparent 70%),
+        radial-gradient(20% 24% at 64% 82%, var(--gold), transparent 70%);
+    }
     /* Contact: sky low on the left, gold and sage behind the form. */
     .page-glow[data-page='contact'] {
       background:
