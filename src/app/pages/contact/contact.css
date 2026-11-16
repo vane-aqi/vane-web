@@ -141,3 +141,104 @@ textarea:focus {
   font-size: 14px;
   color: var(--muted);
 }
+
+/* Phones: the intro, email and whole form fit on one screen. The email becomes a
+   slim one-line pill, name and email share a row and the message box is shorter. */
+@media (max-width: 600px) {
+  .page {
+    gap: 16px;
+    padding-top: 18px;
+  }
+  .intro {
+    flex-basis: 100%;
+    gap: 8px;
+  }
+  .kicker {
+    display: none;
+  }
+  h1 {
+    font-size: 34px;
+  }
+  .lede {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .channel {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 4px;
+    padding: 8px 14px;
+    border-radius: 999px;
+  }
+  .channel dt {
+    font-size: 11px;
+  }
+  .channel dd {
+    margin: 0;
+    font-size: 14px;
+  }
+  form {
+    flex-basis: 100%;
+    min-width: 0;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 22px;
+  }
+  h2 {
+    font-size: 19px;
+  }
+  .pair {
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+  .pair .field {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .field {
+    gap: 5px;
+  }
+  label {
+    font-size: 13px;
+  }
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 9px 12px;
+    border-radius: 10px;
+  }
+  textarea {
+    height: 92px;
+  }
+  .actions {
+    font-size: 12.5px;
+  }
+  .actions .btn {
+    width: 100%;
+    min-height: 42px;
+  }
+}
+
+/* Short phones (iPhone SE and similar): a little tighter still. */
+@media (max-width: 600px) and (max-height: 720px) {
+  .page {
+    gap: 12px;
+    padding-top: 12px;
+  }
+  h1 {
+    font-size: 30px;
+  }
+  .lede {
+    font-size: 14px;
+  }
+  form {
+    gap: 9px;
+    padding: 14px 16px;
+  }
+  textarea {
+    height: 66px;
+  }
+}
